@@ -5,8 +5,47 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Field, FieldGroup, FieldLabel, FieldSet } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
+import { useForm } from "react-hook-form";
+import { SignInSchema, SignInType } from "../schemas/authSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FieldWLabel } from "@/shared/components/forms/FieldWLabel";
+import { Spinner } from "@/shared/components/ui/spinner";
+
+type FieldConfig = {
+    label: string
+    id: keyof SignInType
+    type: string
+    placeholder: string
+}
+
+
+const fields: FieldConfig[] = [
+    {
+        label: 'E-mail', id: 'email', type: 'email', placeholder: 'Ingresa tu email'
+    },
+    {
+        label: 'Contraseña', id: 'password', type: 'password', placeholder: 'Ingresa tu contraseña'
+    },
+]
 
 export function SignInForm() {
+
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors, isSubmitting }
+    } = useForm<SignInType>({
+        resolver: zodResolver(SignInSchema),
+        mode: 'onChange'
+    })
+
+    const onSubmit = (data: SignInType) => {
+        setTimeout(() => { 
+            console.log(data)
+        }, 2000)
+    }
+
     return (
         <Card>
             <CardHeader>
@@ -17,36 +56,38 @@ export function SignInForm() {
                     Sign-in
                 </CardDescription>
             </CardHeader>
-            <Form>
+            <Form
+                onSubmit={handleSubmit(onSubmit)}
+            >
                 <CardContent>
                     <FieldSet>
                         <FieldGroup>
-                            <Field>
-                                <FieldLabel htmlFor="email">
-                                    E-mail
-                                </FieldLabel>
-                                <Input
-                                    type="email"
-                                    id="email"
-                                    placeholder="Ingresa tu E-mail"
+                            {fields.map(({ id, label, type, placeholder }) => (
+                                <FieldWLabel
+                                    key={id}
+                                    id={id}
+                                    label={label}
+                                    type={type}
+                                    placeholder={placeholder}
+                                    error={errors[id]?.message}
+                                    {...register(id)}
                                 />
-                            </Field>
-                            <Field>
-                                <FieldLabel htmlFor="password">
-                                    Ingresa tu contraseña
-                                </FieldLabel>
-                                <Input
-                                    type="password"
-                                    id="password"
-                                    placeholder="Ingresa tu contraseña"
-                                />
-                            </Field>
+                            ))}
                         </FieldGroup>
                     </FieldSet>
                 </CardContent>
                 <CardFooter className="mt-8">
-                    <Button type="submit" className="w-full">
-                        Iniciar sesión
+                    <Button
+                        disabled={isSubmitting}
+                        type="submit"
+                        className="w-full disabled:cursor-not-allowed opacity-90"
+                    >
+                        {isSubmitting ? (
+                            <p>
+                                <Spinner />
+                                Entrando...
+                            </p>
+                        ) : 'Iniciar sesión'}
                     </Button>
                 </CardFooter>
             </Form>

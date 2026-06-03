@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { FieldWLabel } from "@/shared/components/forms/FieldWLabel";
 import { signUpAction } from "../actions/auth-actions";
 import { toast } from "sonner";
+import { Spinner } from "@/shared/components/ui/spinner";
 
 type FieldConfig = {
     label: string
@@ -30,7 +31,7 @@ export function SignUpForm() {
         register,
         handleSubmit,
         reset,
-        formState: { errors }
+        formState: { errors, isSubmitting }
     } = useForm<SignUpType>({
         resolver: zodResolver(SignUpSchema),
         mode: 'onChange'
@@ -69,8 +70,17 @@ export function SignUpForm() {
                     </FieldGroup>
                 </CardContent>
                 <CardFooter className="mt-8">
-                    <Button type="submit" className="w-full">
-                        Crear cuenta
+                    <Button
+                        disabled={isSubmitting}
+                        type="submit"
+                        className="w-full disabled:cursor-not-allowed opacity-90"
+                    >
+                        {isSubmitting ? (
+                            <p>
+                                <Spinner />
+                                Creando...
+                            </p>
+                        ) : 'Crear cuenta'}
                     </Button>
                 </CardFooter>
             </Form>

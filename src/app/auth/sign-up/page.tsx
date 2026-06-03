@@ -1,4 +1,4 @@
-import { SignUpForm } from "@/features/auth/components/register-form";
+import { SignUpForm } from "@/features/auth/components/sign-up-form";
 import { Heading } from "@/shared/components/typography/heading";
 import { Metadata } from "next";
 import Link from "next/link";
