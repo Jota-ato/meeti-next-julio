@@ -76,7 +76,7 @@ export function SignUpForm() {
                         className="w-full disabled:cursor-not-allowed opacity-90"
                     >
                         {isSubmitting ? (
-                            <p>
+                            <p className="flex items-center gap-2">
                                 <Spinner />
                                 Creando...
                             </p>

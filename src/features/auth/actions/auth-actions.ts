@@ -1,9 +1,10 @@
 "use server"
 
-import { SignUpSchema, SignUpType } from "../schemas/authSchema";
+import { SignInSchema, SignInType, SignUpSchema, SignUpType } from "../schemas/authSchema";
 import { authService } from "../services/AuthService";
+import { ActionResponse } from "../types/auth.types";
 
-export async function signUpAction(input: SignUpType) {
+export async function signUpAction(input: SignUpType): ActionResponse {
     const zodResponse = SignUpSchema.safeParse(input)
 
     if (zodResponse.error) {
@@ -17,4 +18,17 @@ export async function signUpAction(input: SignUpType) {
 
     const response = await authService.register(data)
     return response
+}
+
+export async function signInAction(input: SignInType): ActionResponse { 
+    const zodResponse = SignInSchema.safeParse(input)
+
+    if (zodResponse.error) { 
+        return {
+            success: false,
+            message: 'Ocurrió un error'
+        }
+    }
+
+    return await authService.signIn(input)
 }

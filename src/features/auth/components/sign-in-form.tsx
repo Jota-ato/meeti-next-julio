@@ -2,14 +2,15 @@
 
 import { Form } from "@/shared/components/forms/Form";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui/card";
-import { Field, FieldGroup, FieldLabel, FieldSet } from "@/shared/components/ui/field";
-import { Input } from "@/shared/components/ui/input";
+import { FieldGroup, FieldSet } from "@/shared/components/ui/field";
 import { Button } from "@/shared/components/ui/button";
 import { useForm } from "react-hook-form";
 import { SignInSchema, SignInType } from "../schemas/authSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldWLabel } from "@/shared/components/forms/FieldWLabel";
 import { Spinner } from "@/shared/components/ui/spinner";
+import { signInAction } from "../actions/auth-actions";
+import { toast } from "sonner";
 
 type FieldConfig = {
     label: string
@@ -40,10 +41,15 @@ export function SignInForm() {
         mode: 'onChange'
     })
 
-    const onSubmit = (data: SignInType) => {
-        setTimeout(() => { 
-            console.log(data)
-        }, 2000)
+    const onSubmit = async (data: SignInType) => {
+        const { success, message } = await signInAction(data)
+
+        if (success) {
+            toast.success(message)
+            reset()
+        } else { 
+            toast.error(message)
+        }
     }
 
     return (
@@ -83,7 +89,7 @@ export function SignInForm() {
                         className="w-full disabled:cursor-not-allowed opacity-90"
                     >
                         {isSubmitting ? (
-                            <p>
+                            <p className="flex items-center gap-2">
                                 <Spinner />
                                 Entrando...
                             </p>
