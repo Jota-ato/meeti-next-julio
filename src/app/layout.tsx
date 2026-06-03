@@ -14,8 +14,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "Meeti Next",
-    description: "Meeti next julio",
+    title: {
+        default: "Meeti Next",
+        template: '%s | Meeti Next'
+    },
+    description: "Meeti next julio con DrizzelORM",
 };
 
 export default function RootLayout({
