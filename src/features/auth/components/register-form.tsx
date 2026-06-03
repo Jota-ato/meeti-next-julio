@@ -1,67 +1,66 @@
+'use client'
+
 import { Form } from "@/shared/components/forms/Form";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui/card";
-import { Field, FieldGroup, FieldLabel } from "@/shared/components/ui/field";
-import { Input } from "@/shared/components/ui/input";
+import { FieldGroup } from "@/shared/components/ui/field";
+import { SignUpSchema, SignUpType } from "../schemas/authSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { FieldWLabel } from "@/shared/components/forms/FieldWLabel";
+import { signUpAction } from "../actions/auth-actions";
+
+type FieldConfig = {
+    label: string
+    id: keyof SignUpType
+    type: string
+    placeholder: string
+}
+
+const fields: FieldConfig[] = [
+    { label: 'Nombre', id: 'name', type: 'text', placeholder: 'Ingresa tu nombre' },
+    { label: 'E-mail', id: 'email', type: 'email', placeholder: 'Ingresa tu email' },
+    { label: 'Contraseña', id: 'password', type: 'password', placeholder: 'Contraseña - Min. 8 caracteres' },
+    { label: 'Repite contraseña', id: 'passwordConfirmation', type: 'password', placeholder: 'Repite tu contraseña' },
+]
 
 export function SignUpForm() {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+    } = useForm<SignUpType>({
+        resolver: zodResolver(SignUpSchema),
+        mode: 'onChange'
+    })
+
+    const onSubmit = async (data: SignUpType) => {
+        await signUpAction(data)
+    }
+
     return (
         <Card>
             <CardHeader>
-                <CardTitle>
-                    Crea tu cuenta
-                </CardTitle>
+                <CardTitle>Crea tu cuenta</CardTitle>
             </CardHeader>
-            <Form>
+            <Form onSubmit={handleSubmit(onSubmit)}>
                 <CardContent>
                     <FieldGroup>
-                        <Field>
-                            <FieldLabel htmlFor="name">
-                                Nombre
-                            </FieldLabel>
-                            <Input
-                                id="name"
-                                type="text"
-                                placeholder="Ingresa tu nombre"
+                        {fields.map(({ id, label, type, placeholder }) => (
+                            <FieldWLabel
+                                key={id}
+                                id={id}
+                                label={label}
+                                type={type}
+                                placeholder={placeholder}
+                                error={errors[id]?.message}
+                                {...register(id)}
                             />
-                        </Field>
-                        <Field>
-                            <FieldLabel htmlFor="email">
-                                E-mail
-                            </FieldLabel>
-                            <Input
-                                id="email"
-                                type="email"
-                                placeholder="Ingresa tu Email"
-                            />
-                        </Field>
-                        <Field>
-                            <FieldLabel htmlFor="password">
-                                Contraseña
-                            </FieldLabel>
-                            <Input
-                                id="password"
-                                type="password"
-                                placeholder="Contraseña - Min. 8 caracteres"
-                            />
-                        </Field>
-                        <Field>
-                            <FieldLabel htmlFor="password_confirmation">
-                                Contraseña
-                            </FieldLabel>
-                            <Input
-                                id="password_confirmation"
-                                type="password"
-                                placeholder="Repite tu contraseña"
-                            />
-                        </Field>
+                        ))}
                     </FieldGroup>
                 </CardContent>
                 <CardFooter className="mt-8">
-                    <Button
-                        type="submit"
-                        className="w-full"
-                    >
+                    <Button type="submit" className="w-full">
                         Crear cuenta
                     </Button>
                 </CardFooter>
