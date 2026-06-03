@@ -1,3 +1,4 @@
+import { auth } from "@/lib/auth";
 import { SignUpType } from "../schemas/authSchema";
 
 class AuthService {
@@ -9,6 +10,18 @@ class AuthService {
         // Validación de negocio
 
         // Manejar el registro
+        const data = await auth.api.signUpEmail({
+            body: {
+                name,
+                email,
+                password,
+            },
+        });
+
+        return {
+            message: 'Cuenta creada correctamente, revisa tu e-mail',
+            success: true,
+        }
     }
 }
 

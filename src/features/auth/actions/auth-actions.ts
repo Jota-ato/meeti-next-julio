@@ -8,13 +8,13 @@ export async function signUpAction(input: SignUpType) {
 
     if (zodResponse.error) {
         return {
-            error: 'Hubo un error',
-            success: false
+            success: false,
+            message: 'Ocurrió un error'
         }
     }
 
     const data = zodResponse.data
 
-    await authService.register(data)
-
+    const response = await authService.register(data)
+    return response
 }

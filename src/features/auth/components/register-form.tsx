@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { FieldWLabel } from "@/shared/components/forms/FieldWLabel";
 import { signUpAction } from "../actions/auth-actions";
+import { toast } from "sonner";
 
 type FieldConfig = {
     label: string
@@ -28,6 +29,7 @@ export function SignUpForm() {
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors }
     } = useForm<SignUpType>({
         resolver: zodResolver(SignUpSchema),
@@ -35,7 +37,14 @@ export function SignUpForm() {
     })
 
     const onSubmit = async (data: SignUpType) => {
-        await signUpAction(data)
+        const { success, message } = await signUpAction(data)
+
+        if (success) {
+            toast.success(message)
+            reset()
+        } else { 
+            toast.error(message)
+        }
     }
 
     return (
