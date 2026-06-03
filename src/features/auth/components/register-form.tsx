@@ -1,11 +1,12 @@
 import { Form } from "@/shared/components/forms/Form";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { Button } from "@/shared/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Field, FieldGroup, FieldLabel } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 
 export function SignUpForm() {
     return (
-        <Card className="mt-8 w-full">
+        <Card>
             <CardHeader>
                 <CardTitle>
                     Crea tu cuenta
@@ -56,6 +57,14 @@ export function SignUpForm() {
                         </Field>
                     </FieldGroup>
                 </CardContent>
+                <CardFooter className="mt-8">
+                    <Button
+                        type="submit"
+                        className="w-full"
+                    >
+                        Crear cuenta
+                    </Button>
+                </CardFooter>
             </Form>
         </Card>
     )

@@ -1,12 +1,10 @@
-"use client"
-
 import { Form } from "@/shared/components/forms/Form";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Field, FieldGroup, FieldLabel, FieldSet } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 
-export function SignInForm() {
+export default function forgotPasswordForm() {
     return (
         <Card>
             <CardHeader>
@@ -31,22 +29,12 @@ export function SignInForm() {
                                     placeholder="Ingresa tu E-mail"
                                 />
                             </Field>
-                            <Field>
-                                <FieldLabel htmlFor="password">
-                                    Ingresa tu contraseña
-                                </FieldLabel>
-                                <Input
-                                    type="password"
-                                    id="password"
-                                    placeholder="Ingresa tu contraseña"
-                                />
-                            </Field>
                         </FieldGroup>
                     </FieldSet>
                 </CardContent>
                 <CardFooter className="mt-8">
                     <Button type="submit" className="w-full">
-                        Iniciar sesión
+                        Enviar instrucciones
                     </Button>
                 </CardFooter>
             </Form>

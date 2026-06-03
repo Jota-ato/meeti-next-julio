@@ -1,30 +1,30 @@
-import { SignInForm } from "@/features/auth/components/sign-in-form";
+import ForgotPasswordForm from "@/features/auth/components/forgot-password-form";
 import { Heading } from "@/shared/components/typography/heading";
 import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-    title: "Iniciar Sesión"
+    title: 'Recuperar contraseña'
 }
 
-export default function SignInPage() {
+export default function ForgotPasswordPage() {
     return (
         <div className="w-9/10 max-w-2xl">
             <Heading className="text-center mb-8">
-                Iniciar sesión
+                Recupera tu acceso a meeti
             </Heading>
-            <SignInForm />
+            <ForgotPasswordForm />
 
             <nav className="mt-4 px-4 flex justify-between font-bold">
+                <Link
+                    href="/auth/sign-in"
+                >
+                    Iniciar sesión
+                </Link>
                 <Link
                     href="/auth/sign-up"
                 >
                     Crear cuenta
-                </Link>
-                <Link
-                    href="/auth/forgot-password"
-                >
-                    Olvide mi contraseña
                 </Link>
             </nav>
         </div>
