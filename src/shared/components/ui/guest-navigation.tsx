@@ -11,13 +11,15 @@ export function GuestNavigation() {
             >
                 <Link
                     className="font-bold text-sm sm:text-base"
-                    href="/auth/sign-in"
+                    href={"/auth/sign-in"}
                 >
                     Iniciar Sesión
                 </Link>
             </Button>
             <Button
                 asChild
+                variant={'secondary'}
+                className="font-bold text-sm sm:text-base"
             >
                 <Link
                     href="/auth/sign-up"

@@ -1,3 +1,4 @@
+import { Heading } from "@/shared/components/typography/heading";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,7 +8,9 @@ export const metadata: Metadata = {
 export default function SignUpPage() {
     return (
         <>
-            <h1>Crear Cuenta</h1>
+            <Heading className="text-center">
+                Crear cuenta
+            </Heading>
         </>
     )
 }

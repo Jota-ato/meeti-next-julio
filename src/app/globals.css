@@ -4,6 +4,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@utility bg-hero {
+    background-image: url("/img/hero.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
 @theme {
     --font-mono: "geist-mono", monospace;
 }

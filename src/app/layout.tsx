@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
     title: {
         default: "Meeti Next",
-        template: '%s | Meeti Next'
+        template: `%s | ${process.env.APP_NAME}`
     },
     description: "Meeti next julio con DrizzelORM",
 };

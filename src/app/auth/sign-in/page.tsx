@@ -1,3 +1,4 @@
+import { Heading } from "@/shared/components/typography/heading";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,7 +8,9 @@ export const metadata: Metadata = {
 export default function SignInPage() {
     return (
         <>
-            <h1>Iniciar Sesión</h1>
+            <Heading className="text-center">
+                Iniciar sesión
+            </Heading>
         </>
     )
 }

@@ -7,13 +7,13 @@ export function Header() {
         <header className="border-b border-gray-200">
             <div className="sm:flex sm:justify-between sm:items-center max-w-7xl mx-auto p-5 lg:px-0">
                 <div className="flex justify-center py-10 sm:py-0">
-                    <Link href='/'>
-                        <div className="w-32">
-                            <Logo />
-                        </div>
+                    <Link
+                        href='/'
+                        className="flex items-center sm:justify-center"
+                    >
+                        <Logo />
                     </Link>
                 </div>
-                {/* TODO: Navegación Aquí */}
                 <GuestNavigation />
             </div>
         </header>
