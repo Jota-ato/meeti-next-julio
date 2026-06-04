@@ -5,7 +5,7 @@ import { Dialog, DialogBackdrop, DialogPanel, TransitionChild } from '@headlessu
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Logo } from '../ui/logo'
 import { NotificationsPanel } from './notifications-panel'
-import { UserMenu } from './user-menu'
+import { UserMenu } from './user-menu/user-menu'
 import { MobileSidebar } from './mobile-sidebar'
 import { DashboardNavigation } from './dashboard-navigation'
 
