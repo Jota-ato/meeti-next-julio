@@ -85,7 +85,7 @@ export function SignInForm() {
                 </CardContent>
                 <CardFooter className="mt-8">
                     <SubmitButton
-                        isSubmitting
+                        isSubmitting={isSubmitting}
                         loadingLabel="Iniciando..."
                         label="Iniciar sesión"
                     />

@@ -1,4 +1,7 @@
 import { Heading } from "@/shared/components/typography/heading";
+import { Button } from "@/shared/components/ui/button";
+import { Container } from "@/shared/components/ui/container";
+import { ChevronLeft } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 
@@ -11,19 +14,20 @@ export const metadata: Metadata = {
 
 export default function JoinedCommunitiesPage() {
     return (
-        <>
+        <Container>
             <Heading>
                 {title}
             </Heading>
-            <div className="w-[90%] max-w-6xl mx-auto">
+            <Button className="mt-8" variant={'link'}>
                 <Link
                     href="/dashboard/communities"
-                    className="mt-5 block lg:inline-block text-center bg-orange-500 hover:bg-orange-600 transition-colors text-xs lg:text-xl text-white py-3 px-10  font-bold"
+                    className="flex items-center gap-2"
                 >
+                    <ChevronLeft />
                     Volver a mis Comunidades
                 </Link>
-            </div>
+            </Button>
 
-        </>
+        </Container>
     )
 }
