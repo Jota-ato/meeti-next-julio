@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
-import { SignInType, SignUpType } from "../schemas/authSchema";
-import { authRepository, IAuthRepository } from "./AuthRepository";
+import { SignInType, SignUpType } from "../schemas/auth-schema";
+import { authRepository, IAuthRepository } from "./auth-repository";
 import { ActionResponse } from "../types/auth.types";
 import { headers } from "next/headers";
 import { APIError } from "better-auth";
