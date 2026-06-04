@@ -45,9 +45,9 @@ export function SidebarNavGroup({ label, groupIcon: GroupIcon, items, pathName, 
                 <CollapsibleContent>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {items.map(item => (
+                            {items.map((item, i) => (
                                 <SidebarNavItem
-                                    key={item.href}
+                                    key={item.href + i}
                                     item={item}
                                     pathName={pathName}
                                     isCollapsed={isCollapsed}

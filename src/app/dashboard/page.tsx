@@ -14,7 +14,7 @@ export default async function DashboardPage() {
 
     return (
         <div>
-            <Heading>
+            <Heading className="text-center">
                 Panel de administración
             </Heading>
         </div>
