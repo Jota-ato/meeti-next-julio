@@ -1,6 +1,6 @@
 "use server"
 
-import { ForgotPasswordSchema, ForgotPasswordType, SignInSchema, SignInType, SignUpSchema, SignUpType } from "../schemas/auth-schema";
+import { ForgotPasswordSchema, ForgotPasswordType, ResetPasswordSchema, ResetPasswordType, SignInSchema, SignInType, SignUpSchema, SignUpType } from "../schemas/auth-schema";
 import { authService } from "../services/auth-service";
 import { ActionResponse } from "../types/auth.types";
 
@@ -18,10 +18,10 @@ export async function signUpAction(input: SignUpType): ActionResponse {
     return response
 }
 
-export async function signInAction(input: SignInType): ActionResponse { 
+export async function signInAction(input: SignInType): ActionResponse {
     const zodResponse = SignInSchema.safeParse(input)
 
-    if (zodResponse.error) { 
+    if (zodResponse.error) {
         return {
             success: false,
             message: 'Ocurrió un error'
@@ -31,8 +31,21 @@ export async function signInAction(input: SignInType): ActionResponse {
     return await authService.signIn(zodResponse.data)
 }
 
-export async function forgotPasswordAction(input: ForgotPasswordType): ActionResponse { 
+export async function forgotPasswordAction(input: ForgotPasswordType): ActionResponse {
     const zodResponse = ForgotPasswordSchema.safeParse(input)
+
+    if (zodResponse.error) {
+        return {
+            success: false,
+            message: 'Hubo un error'
+        }
+    }
+
+    return await authService.requestPasswordReset(zodResponse.data)
+}
+
+export async function setNewPasswordAction(input: ResetPasswordType, token: string): ActionResponse {
+    const zodResponse = ResetPasswordSchema.safeParse(input)
 
     if (zodResponse.error) { 
         return {
@@ -41,5 +54,5 @@ export async function forgotPasswordAction(input: ForgotPasswordType): ActionRes
         }
     }
 
-    return await authService.requestPasswordReset(zodResponse.data)
+    return await authService.setNewNewPassword(input, token)
 }

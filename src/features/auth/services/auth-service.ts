@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth";
-import { ForgotPasswordType, SignInType, SignUpType } from "../schemas/auth-schema";
+import { ForgotPasswordType, ResetPasswordType, SignInType, SignUpType } from "../schemas/auth-schema";
 import { authRepository, IAuthRepository } from "./auth-repository";
 import { ActionResponse } from "../types/auth.types";
 import { headers } from "next/headers";
@@ -100,16 +100,42 @@ class AuthService {
                     email
                 }
             })
-
-
+            return {
+                success: true,
+                message: 'Hemos enviado un email con instrucciones'
+            }
         } catch (error) {
-
+            return {
+                success: false,
+                message: 'Ocurrió un error'
+            }
         }
-        return {
-            success: true,
-            message: 'Hemos enviado un email con instrucciones'
-        }
+    }
 
+    async setNewNewPassword({ newPassword }: ResetPasswordType, token: string): ActionResponse { 
+        try {
+            await auth.api.resetPassword({
+                body: {
+                    newPassword,
+                    token
+                }
+            })
+            return {
+                success: true,
+                message: 'Contraseña restablecida correctamente'
+            }
+        } catch (error) {
+            if (error instanceof APIError) { 
+                return {
+                    success: false,
+                    message: 'Token no válido o expirado'
+                }
+            }
+            return {
+                success: false,
+                message: ''
+            }
+        }
     }
 }
 

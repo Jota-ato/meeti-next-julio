@@ -10,6 +10,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { ResetPasswordSchema, ResetPasswordType } from "../schemas/auth-schema";
 import { redirect, useSearchParams } from "next/navigation";
+import { setNewPasswordAction } from "../actions/auth-actions";
+import { toast } from "sonner";
 
 export function SetPasswordForm() {
 
@@ -29,7 +31,13 @@ export function SetPasswordForm() {
     })
 
     const onSubmit = async (data: ResetPasswordType) => { 
+        const { success, message } = await setNewPasswordAction(data, token)
 
+        if (success) {
+            toast.success(message)
+            reset()
+            redirect('/dashboard')
+        } else toast.error(message)
     }
 
     return (
