@@ -1,14 +1,21 @@
 import Image from "next/image";
 
-export function Logo() {
+interface Props { 
+    width?: number
+    height?: number
+    className?: string
+}
+
+export function Logo({ width = 100, height = 100, className} : Props) {
     return (
         <Image
             src="/img/logo.svg"
             alt="Logotipo Meeti"
-            width={200}
-            height={200}
+            width={width}
+            height={height}
             title="Logotipo Meeti"
             loading="eager"
+            className={className}
         />
     )
 }
