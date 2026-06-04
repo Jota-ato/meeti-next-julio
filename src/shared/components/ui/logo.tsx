@@ -5,9 +5,10 @@ export function Logo() {
         <Image
             src="/img/logo.svg"
             alt="Logotipo Meeti"
-            width={100}
-            height={100}
+            width={200}
+            height={200}
             title="Logotipo Meeti"
+            loading="eager"
         />
     )
 }

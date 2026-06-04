@@ -11,7 +11,7 @@ class AuthService {
         private authRepository: IAuthRepository
     ) { }
 
-    async register(credentials: SignUpType): ActionResponse {
+    async signUp(credentials: SignUpType): ActionResponse {
         const { name, email, password } = credentials
 
         // Revisar si el usuario existe
@@ -31,7 +31,9 @@ class AuthService {
                 name,
                 email,
                 password,
+                callbackURL: '/dashboard'
             },
+            headers: await headers(),
         });
 
         return {
@@ -73,7 +75,7 @@ class AuthService {
 
 
             if (error instanceof APIError) {
-                const messagesMap: Record<number, string> = { 
+                const messagesMap: Record<number, string> = {
                     401: 'Usuario o contraseña incorrectos',
                     403: 'Tu cuenta no ha sido confirmada aún. Revisa tu email'
                 }

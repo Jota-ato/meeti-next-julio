@@ -11,6 +11,7 @@ import { FieldWLabel } from "@/shared/components/forms/FieldWLabel";
 import { Spinner } from "@/shared/components/ui/spinner";
 import { signInAction } from "../actions/auth-actions";
 import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 type FieldConfig = {
     label: string
@@ -47,6 +48,7 @@ export function SignInForm() {
         if (success) {
             toast.success(message)
             reset()
+            redirect('/dashboard')
         } else { 
             toast.error(message)
         }

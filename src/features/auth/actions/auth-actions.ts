@@ -16,7 +16,7 @@ export async function signUpAction(input: SignUpType): ActionResponse {
 
     const data = zodResponse.data
 
-    const response = await authService.register(data)
+    const response = await authService.signUp(data)
     return response
 }
 

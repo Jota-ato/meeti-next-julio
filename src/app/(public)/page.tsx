@@ -5,7 +5,9 @@ export const metadata: Metadata = {
     title: 'Inicio'
 }
 
-export default function Home() {
+export default async function Home() {
+
+    
     return (
         <div>
             <Hero />
