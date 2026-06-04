@@ -49,10 +49,10 @@ export default function RootLayout({
                         toastOptions={{
                             classNames: {
                                 toast: 'font-sans',
-                                success: '!border-success/10 !bg-success/10 !text-success',
-                                warning: '!border-warning/10 !bg-warning/10 !text-warning',
-                                error: '!border-destructive/10 !bg-destructive/10 !text-destructive',
-                                info: '!border-info/10 !bg-info/10 !text-info',
+                                success: '!border-success !bg-success !text-success-foreground',
+                                warning: '!border-warning !bg-warning !text-warning-foreground',
+                                error: '!border-destructive !bg-destructive !text-destructive-foreground',
+                                info: '!border-info !bg-info !text-info-foreground',
                                 actionButton: '!bg-primary !text-primary-foreground hover:!bg-primary/90',
                                 cancelButton: '!bg-secondary !text-secondary-foreground hover:!bg-secondary/80',
                                 closeButton: '!border-border !bg-background !text-muted-foreground hover:!bg-accent hover:!text-accent-foreground',

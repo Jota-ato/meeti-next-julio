@@ -44,8 +44,8 @@ export function SignOutButton() {
                     <AlertDialogTitle>
                         ¿Seguro que quieres cerrar sesión?
                     </AlertDialogTitle>
-                    <AlertDialogDescription>
-                        xd
+                    <AlertDialogDescription className="sr-only">
+                        Salir de tu cuenta
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
