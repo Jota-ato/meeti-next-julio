@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth";
-import { SignInType, SignUpType } from "../schemas/auth-schema";
+import { ForgotPasswordType, SignInType, SignUpType } from "../schemas/auth-schema";
 import { authRepository, IAuthRepository } from "./auth-repository";
 import { ActionResponse } from "../types/auth.types";
 import { headers } from "next/headers";
@@ -11,9 +11,7 @@ class AuthService {
         private authRepository: IAuthRepository
     ) { }
 
-    async signUp(credentials: SignUpType): ActionResponse {
-        const { name, email, password } = credentials
-
+    async signUp({ name, email, password }: SignUpType): ActionResponse {
         // Revisar si el usuario existe
         const userExists = await this.authRepository.userExists(email)
         if (userExists) {
@@ -22,8 +20,6 @@ class AuthService {
                 message: 'Este email ya está registrado, prueba otro. O inicia sesión'
             }
         }
-
-        // Validación de negocio
 
         // Manejar el registro
         await auth.api.signUpEmail({
@@ -42,9 +38,7 @@ class AuthService {
         }
     }
 
-    async signIn(credentials: SignInType): ActionResponse {
-        const { email, password } = credentials
-
+    async signIn({ email, password }: SignInType): ActionResponse {
         // Revisar si el no usuario existe
         const userExists = await this.authRepository.userExists(email)
         if (!userExists) {
@@ -88,6 +82,34 @@ class AuthService {
                 message
             }
         }
+    }
+
+    async requestPasswordReset({ email }: ForgotPasswordType): ActionResponse {
+        const user = await this.authRepository.userExists(email)
+
+        if (!user) {
+            return {
+                success: false,
+                message: 'El usuario no existe'
+            }
+        }
+
+        try {
+            await auth.api.requestPasswordReset({
+                body: {
+                    email
+                }
+            })
+
+
+        } catch (error) {
+
+        }
+        return {
+            success: true,
+            message: 'Hemos enviado un email con instrucciones'
+        }
+
     }
 }
 

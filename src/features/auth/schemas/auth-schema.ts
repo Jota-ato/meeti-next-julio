@@ -15,8 +15,6 @@ export const SignInSchema = BaseAuthSchema.pick({
     password: true,
 })
 
-export type SignInType = z.infer<typeof SignInSchema>
-
 export const SignUpSchema = BaseAuthSchema.extend({
     passwordConfirmation: z.string().min(1, { message: 'Confirma tu contraseña' })
 }).refine(
@@ -27,4 +25,26 @@ export const SignUpSchema = BaseAuthSchema.extend({
     }
 )
 
+export const ForgotPasswordSchema = BaseAuthSchema.pick({
+    email: true
+})
+
+export const ResetPasswordSchema = z.object({
+    newPassword: z.string()
+        .trim()
+        .min(8, { message: 'Mínimo 8 caracteres en la contraseña' })
+        .regex(/[A-Z]/, { message: 'Debe contener al menos una mayúscula' })
+        .regex(/[^a-zA-Z0-9]/, { message: 'Debe contener al menos un carácter especial' }),
+    passwordConfirmation: z.string().min(1, { message: 'Confirma tu contraseña' })
+}).refine(
+    (data) => data.newPassword === data.passwordConfirmation,
+    {
+        message: 'Las contraseñas no coinciden',
+        path: ['passwordConfirmation']
+    }
+)
+
+export type SignInType = z.infer<typeof SignInSchema>
 export type SignUpType = z.infer<typeof SignUpSchema>
+export type ForgotPasswordType = z.infer<typeof ForgotPasswordSchema>
+export type ResetPasswordType = z.infer<typeof ResetPasswordSchema>
