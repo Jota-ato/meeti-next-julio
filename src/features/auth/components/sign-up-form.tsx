@@ -1,16 +1,15 @@
 'use client'
 
 import { Form } from "@/shared/components/forms/Form";
-import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { FieldGroup } from "@/shared/components/ui/field";
 import { SignUpSchema, SignUpType } from "../schemas/auth-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { FieldWLabel } from "@/shared/components/forms/FieldWLabel";
+import { FieldWLabel } from "@/shared/components/forms/field-w-label";
 import { signUpAction } from "../actions/auth-actions";
 import { toast } from "sonner";
-import { Spinner } from "@/shared/components/ui/spinner";
+import { SubmitButton } from "@/shared/components/forms/submit-button";
 
 type FieldConfig = {
     label: string
@@ -70,18 +69,11 @@ export function SignUpForm() {
                     </FieldGroup>
                 </CardContent>
                 <CardFooter className="mt-8">
-                    <Button
-                        disabled={isSubmitting}
-                        type="submit"
-                        className="w-full disabled:cursor-not-allowed opacity-90"
-                    >
-                        {isSubmitting ? (
-                            <p className="flex items-center gap-2">
-                                <Spinner />
-                                Creando...
-                            </p>
-                        ) : 'Crear cuenta'}
-                    </Button>
+                    <SubmitButton
+                        isSubmitting={isSubmitting}
+                        label="Crear cuenta"
+                        loadingLabel="Creando..."
+                    />
                 </CardFooter>
             </Form>
         </Card>

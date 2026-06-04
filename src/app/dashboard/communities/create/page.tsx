@@ -1,3 +1,4 @@
+import { CreateCommunitie } from "@/features/communities/components/create-communitie";
 import { Heading } from "@/shared/components/typography/heading";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -23,6 +24,9 @@ export default function CreateCommunitiePage() {
                     Volver a mis Comunidades
                 </Link>
             </div>
+            <section className="w-[90%] max-w-6xl mx-auto my-12">
+                <CreateCommunitie />
+            </section>
         </>
     )
 }

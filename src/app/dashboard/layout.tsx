@@ -11,7 +11,7 @@ export default async function DashboardLayout({
         <>
             <SidebarProvider>
                 <DashboardSidebar />
-                <main className="min-h-screen w-full relative py-8 sm:py-16">
+                <main className="min-h-screen w-full relative py-12 sm:py-16">
                     <SidebarTrigger className="absolute top-2 left-4 z-20" />
                     {children}
                 </main>

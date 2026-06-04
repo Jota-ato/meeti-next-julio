@@ -3,15 +3,14 @@
 import { Form } from "@/shared/components/forms/Form";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { FieldGroup, FieldSet } from "@/shared/components/ui/field";
-import { Button } from "@/shared/components/ui/button";
 import { useForm } from "react-hook-form";
 import { SignInSchema, SignInType } from "../schemas/auth-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FieldWLabel } from "@/shared/components/forms/FieldWLabel";
-import { Spinner } from "@/shared/components/ui/spinner";
+import { FieldWLabel } from "@/shared/components/forms/field-w-label";
 import { signInAction } from "../actions/auth-actions";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
+import { SubmitButton } from "@/shared/components/forms/submit-button";
 
 type FieldConfig = {
     label: string
@@ -85,18 +84,11 @@ export function SignInForm() {
                     </FieldSet>
                 </CardContent>
                 <CardFooter className="mt-8">
-                    <Button
-                        disabled={isSubmitting}
-                        type="submit"
-                        className="w-full disabled:cursor-not-allowed opacity-90"
-                    >
-                        {isSubmitting ? (
-                            <p className="flex items-center gap-2">
-                                <Spinner />
-                                Entrando...
-                            </p>
-                        ) : 'Iniciar sesión'}
-                    </Button>
+                    <SubmitButton
+                        isSubmitting
+                        loadingLabel="Iniciando..."
+                        label="Iniciar sesión"
+                    />
                 </CardFooter>
             </Form>
         </Card>

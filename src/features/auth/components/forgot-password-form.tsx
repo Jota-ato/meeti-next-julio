@@ -1,15 +1,14 @@
 "use client"
 import { Form } from "@/shared/components/forms/Form";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui/card";
-import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/shared/components/ui/field";
-import { Input } from "@/shared/components/ui/input";
-import { Button } from "@/shared/components/ui/button";
+import { FieldGroup, FieldSet } from "@/shared/components/ui/field";
 import { useForm } from "react-hook-form";
 import { ForgotPasswordSchema, ForgotPasswordType } from "../schemas/auth-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { forgotPasswordAction } from "../actions/auth-actions";
-import { Spinner } from "@/shared/components/ui/spinner";
+import { SubmitButton } from "@/shared/components/forms/submit-button";
+import { FieldWLabel } from "@/shared/components/forms/field-w-label";
 
 export default function ForgotPasswordForm() {
 
@@ -50,38 +49,22 @@ export default function ForgotPasswordForm() {
                 <CardContent>
                     <FieldSet>
                         <FieldGroup>
-                            <Field>
-                                <FieldLabel htmlFor="email">
-                                    E-mail
-                                </FieldLabel>
-                                <Input
-                                    type="email"
-                                    id="email"
-                                    placeholder="Ingresa tu E-mail"
-                                    {...register('email')}
-                                />
-                            </Field>
-                            {errors.email && (
-                                <FieldError>
-                                    {errors.email.message}
-                                </FieldError>
-                            )}
+                            <FieldWLabel
+                                label="E-mail"
+                                id="email"
+                                placeholder="Ingresa tu E-mail"
+                                {...register('email')}
+                                error={errors.email?.message}
+                            />
                         </FieldGroup>
                     </FieldSet>
                 </CardContent>
                 <CardFooter className="mt-8">
-                    <Button
-                        disabled={isSubmitting}
-                        type="submit"
-                        className="w-full disabled:cursor-not-allowed opacity-90"
-                    >
-                        {isSubmitting ? (
-                            <p className="flex items-center gap-2">
-                                <Spinner />
-                                Enviando...
-                            </p>
-                        ) : 'Enviar instrucciones'}
-                    </Button>
+                    <SubmitButton
+                        isSubmitting={isSubmitting}
+                        label="Enviar instrucciones"
+                        loadingLabel="Enviando..."
+                    />
                 </CardFooter>
             </Form>
         </Card>
