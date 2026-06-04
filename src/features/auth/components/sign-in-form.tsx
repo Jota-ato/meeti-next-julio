@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { FieldGroup, FieldSet } from "@/shared/components/ui/field";
 import { Button } from "@/shared/components/ui/button";
 import { useForm } from "react-hook-form";
-import { SignInSchema, SignInType } from "../schemas/authSchema";
+import { SignInSchema, SignInType } from "../schemas/auth-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldWLabel } from "@/shared/components/forms/FieldWLabel";
 import { Spinner } from "@/shared/components/ui/spinner";

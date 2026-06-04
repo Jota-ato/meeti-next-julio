@@ -4,7 +4,7 @@ import { Form } from "@/shared/components/forms/Form";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { FieldGroup } from "@/shared/components/ui/field";
-import { SignUpSchema, SignUpType } from "../schemas/authSchema";
+import { SignUpSchema, SignUpType } from "../schemas/auth-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { FieldWLabel } from "@/shared/components/forms/FieldWLabel";

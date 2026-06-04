@@ -75,7 +75,7 @@ class AuthService {
             if (error instanceof APIError) {
                 const messagesMap: Record<number, string> = { 
                     401: 'Usuario o contraseña incorrectos',
-                    403: 'Tu cuenta no ha sido confirmada aún'
+                    403: 'Tu cuenta no ha sido confirmada aún. Revisa tu email'
                 }
                 console.error(error.message)
                 message = messagesMap[error.statusCode]

@@ -1,7 +1,7 @@
 "use server"
 
-import { SignInSchema, SignInType, SignUpSchema, SignUpType } from "../schemas/authSchema";
-import { authService } from "../services/AuthService";
+import { SignInSchema, SignInType, SignUpSchema, SignUpType } from "../schemas/auth-schema";
+import { authService } from "../services/auth-service";
 import { ActionResponse } from "../types/auth.types";
 
 export async function signUpAction(input: SignUpType): ActionResponse {
