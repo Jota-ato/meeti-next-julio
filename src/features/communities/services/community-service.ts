@@ -4,10 +4,13 @@ import { communityRepository, ICommunityRepository } from "./community-repositor
 class CommunityService { 
     constructor(
         private communityRepository: ICommunityRepository
-    ) { }
+    ) {}
 
     async createCommunity(data: CommunityType, userId: string) { 
-        console.log(data)
+        const community = await this.communityRepository.createCommunity({
+            ...data,
+            createdBy: userId
+        })
     }
 }
 

@@ -1,4 +1,3 @@
-import { InferInsertModel, InferSelectModel } from "drizzle-orm"
 import { pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
 export const community = pgTable('communities', {
@@ -8,6 +7,3 @@ export const community = pgTable('communities', {
     createdAt: timestamp('created_at').defaultNow(),
     createdBy: text('created_by').notNull()
 })
-
-export type InsertCommunity = InferInsertModel<typeof community>
-export type SelectCommunity = InferSelectModel<typeof community>

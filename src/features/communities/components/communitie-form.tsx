@@ -8,6 +8,8 @@ import { CommunitySchema, CommunityType } from "../schemas/comunity-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitButton } from "@/shared/components/forms/submit-button";
 import { createCommunityAction } from "../actions/community-actions";
+import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 type fieldType = {
     label: string
@@ -34,7 +36,13 @@ export function CommunitieForm() {
     })
 
     const onSubmit = async (data: CommunityType) => {
-        await createCommunityAction(data)
+        const { success, message } = await createCommunityAction(data)
+
+        if (!success) toast.error(message)
+        else {
+            toast.success(message)
+            redirect('/dashboard/communities')
+        }
     }
 
     return (

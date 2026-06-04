@@ -24,4 +24,9 @@ export async function createCommunityAction(input: CommunityType) {
     }
 
     await communityService.createCommunity(zodResponse.data, session.user.id)
+
+    return {
+        success: true,
+        message: 'Comunidad creada correctamente'
+    }
 }
