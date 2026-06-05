@@ -49,8 +49,8 @@ export function ThemeToggleSideBar({
                                 key={value}
                                 onClick={() => setTheme(value)}
                                 className={cn(
-                                    "flex items-center gap-2 text-xs sm:text-sm px-4 py-2 hover:bg-secondary hover:text-info rounded-xl transition-all duration-100 cursor-pointer",
-                                    theme === value ? 'text-info' : ''
+                                    "flex items-center gap-2 text-muted-foreground text-xs sm:text-sm px-4 py-2 hover:bg-secondary hover:text-accent-foreground rounded-xl transition-all duration-100 cursor-pointer",
+                                    theme === value ? 'text-accent-foreground' : ''
                                 )}
                             >
                                 <Icon className={cn("size-4 md:size-5 shrink-0", theme === value ? 'text-accent-foreground' : 'text-muted-foreground')} />
