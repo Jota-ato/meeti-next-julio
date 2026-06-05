@@ -104,7 +104,7 @@ class AuthService {
                 success: true,
                 message: 'Hemos enviado un email con instrucciones'
             }
-        } catch (error) {
+        } catch {
             return {
                 success: false,
                 message: 'Ocurrió un error'
