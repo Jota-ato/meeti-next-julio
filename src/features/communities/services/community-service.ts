@@ -6,7 +6,7 @@ import { MembershipPolicy } from "../policies/membership-policy";
 import { SelectCommunity } from "../types/community.types";
 import { notFound } from "next/navigation";
 import { checkPassword } from "@/shared/utils/auth";
-import { success } from "better-auth";
+import { deleteUTFiles } from "@/lib/uploadthing-server";
 
 class CommunityService {
     constructor(
@@ -96,6 +96,7 @@ class CommunityService {
         }
 
         await this.communityRepository.delete(communityId)
+        await deleteUTFiles(community.image)
         return {
             success: true,
             message: 'Communidad eliminada correctamente'
