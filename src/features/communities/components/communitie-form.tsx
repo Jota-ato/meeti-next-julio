@@ -10,7 +10,6 @@ import { SubmitButton } from "@/shared/components/forms/submit-button";
 import { createCommunityAction } from "../actions/community-actions";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
-import { UploadDropzone } from "@/shared/utils/uploadthing";
 import ImageUploader from "./image-uploader";
 
 type fieldType = {

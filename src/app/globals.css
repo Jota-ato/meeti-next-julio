@@ -10,10 +10,6 @@
     background-position: center;
 }
 
-@theme {
-    --font-mono: "geist-mono", monospace;
-}
-
 @theme inline {
     --font-heading: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
