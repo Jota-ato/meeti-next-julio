@@ -14,7 +14,7 @@ export function CommunityItem({
 
     return (
         <li className="flex justify-between gap-x-6 py-5">
-            <div className="flex flex-col md:flex-row items-stretch w-full h-auto bg-card p-4 gap-4 rounded-xl shadow-xl border-card-foreground text-card-foreground overflow-hidden">
+            <div className="flex flex-col md:flex-row items-stretch w-full h-auto bg-card p-4 gap-4 rounded-xl shadow-shadow border-card-foreground text-card-foreground overflow-hidden">
                 <div className="relative w-full max-w-150 md:max-w-60 shrink-0 min-h-35">
                     <Image
                         src={image}

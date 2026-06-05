@@ -21,6 +21,7 @@
     --color-warning-foreground: var(--warning-foreground);
     --color-info: var(--info);
     --color-info-foreground: var(--info-foreground);
+    --color-shadow: var(--shadow);
 
     /* === VARIABLES EXISTENTES === */
     --color-sidebar-ring: var(--sidebar-ring);
@@ -67,7 +68,7 @@
 }
 
 :root {
-    --background: oklch(1 0 0);
+    --background: oklch(0.95 0 0);
     --foreground: oklch(0.141 0.005 285.823);
     --card: oklch(1 0 0);
     --card-foreground: oklch(0.141 0.005 285.823);
@@ -101,6 +102,7 @@
     --info: oklch(0.605 0.16 220.5);
     --info-foreground: oklch(0.985 0 0);
 
+    --shadow: oklch(0.141 0.005 285.823 / 12%);
     --border: oklch(0.92 0.004 286.32);
     --input: oklch(0.92 0.004 286.32);
     --ring: oklch(0.705 0.015 286.067);
@@ -152,6 +154,7 @@
     --info: oklch(0.685 0.14 220.5);
     --info-foreground: oklch(0.141 0.005 285.823);
 
+    --shadow: oklch(0 0 0 / 40%);
     --border: oklch(1 0 0 / 10%);
     --input: oklch(1 0 0 / 15%);
     --ring: oklch(0.552 0.016 285.938);

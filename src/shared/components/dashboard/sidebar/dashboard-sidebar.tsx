@@ -5,7 +5,6 @@ import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
-    SidebarGroup,
     SidebarHeader,
     useSidebar,
 } from "@/shared/components/ui/sidebar"
@@ -13,6 +12,7 @@ import { Logo } from '../../ui/logo'
 import { navigation, userNavigation } from './constants';
 import { SidebarNavGroup } from './sidebar-nav-group';
 import { SignOutButton } from './sign-out-button';
+import { ThemeToggleSideBar } from './theme-toggle-sidebar';
 
 export function DashboardSidebar() {
     const pathName = usePathname()
@@ -20,7 +20,7 @@ export function DashboardSidebar() {
     const isCollapsed = state === 'collapsed'
 
     return (
-        <Sidebar>
+        <Sidebar collapsible="icon">
             <SidebarHeader>
                 <Logo className="mx-auto" />
             </SidebarHeader>
@@ -39,7 +39,9 @@ export function DashboardSidebar() {
                     pathName={pathName}
                     isCollapsed={isCollapsed}
                 />
-                <SidebarGroup />
+                <ThemeToggleSideBar
+                    isCollapsed={isCollapsed}
+                />
             </SidebarContent>
             <SidebarFooter className="p-4">
                 <SignOutButton />
