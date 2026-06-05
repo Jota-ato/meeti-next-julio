@@ -2,7 +2,7 @@
 
 import { FieldWLabel } from "@/shared/components/forms/field-w-label";
 import { Form } from "@/shared/components/forms/Form";
-import { FieldSet } from "@/shared/components/ui/field";
+import { FieldError, FieldSet } from "@/shared/components/ui/field";
 import { useForm } from "react-hook-form";
 import { CommunitySchema, CommunityType } from "../schemas/comunity-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,7 +10,7 @@ import { SubmitButton } from "@/shared/components/forms/submit-button";
 import { createCommunityAction } from "../actions/community-actions";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
-import ImageUploader from "./image-uploader";
+import ImageUploader from "@/shared/components/upload/image-uploader";
 
 type fieldType = {
     label: string
@@ -30,6 +30,7 @@ export function CommunitieForm() {
         register,
         reset,
         handleSubmit,
+        setValue,
         formState: { errors, isSubmitting }
     } = useForm<CommunityType>({
         resolver: zodResolver(CommunitySchema),
@@ -61,7 +62,15 @@ export function CommunitieForm() {
                             textarea={field.textArea}
                         />
                     ))}
-                    <ImageUploader />
+                    <ImageUploader
+                        onChange={(url) => setValue("image", url || "", { shouldValidate: true })}
+                        label="Imagen de comunidad"
+                    />
+                    {errors.image &&
+                        <FieldError>
+                            {errors.image.message}
+                        </FieldError>
+                    }
                     <SubmitButton
                         isSubmitting={isSubmitting}
                         label="Crear comunidad"

@@ -1,6 +1,7 @@
 import { Heading } from "@/shared/components/typography/heading";
 import { Button } from "@/shared/components/ui/button";
 import { Container } from "@/shared/components/ui/container";
+import { Separator } from "@/shared/components/ui/separator";
 import { ChevronLeft } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -27,7 +28,7 @@ export default function JoinedCommunitiesPage() {
                     Volver a mis Comunidades
                 </Link>
             </Button>
-
+            <Separator className="my-8" />
         </Container>
     )
 }

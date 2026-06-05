@@ -5,5 +5,6 @@ export const community = pgTable('communities', {
     name: varchar('name', { length: 255 }).notNull(),
     description: text('description').notNull(),
     createdAt: timestamp('created_at').defaultNow(),
-    createdBy: text('created_by').notNull()
+    createdBy: text('created_by').notNull(),
+    image: varchar('image', { length: 120 }).notNull()    
 })

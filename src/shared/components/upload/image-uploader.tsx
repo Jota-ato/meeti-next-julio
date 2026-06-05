@@ -6,13 +6,19 @@ import { toast } from "sonner"
 import { ImageIcon, X, CheckCircle2 } from "lucide-react"
 import Image from "next/image";
 
-export default function ImageUploader() {
+export default function ImageUploader({
+    label,
+    onChange
+}: {
+    label: string
+    onChange: (url: string | null) => void
+}) {
     const [imageUrl, setImageUrl] = useState<string | null>(null)
     const [isUploading, setIsUploading] = useState(false)
 
     return (
         <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground">Imagen de portada</p>
+            <p className="text-sm font-medium text-foreground">{label}</p>
 
             {imageUrl ? (
                 // Preview de la imagen subida
@@ -27,7 +33,10 @@ export default function ImageUploader() {
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
                         <button
                             type="button"
-                            onClick={() => setImageUrl(null)}
+                            onClick={() => {
+                                setImageUrl(null)
+                                onChange(null)
+                            }}
                             className="flex items-center gap-1.5 text-xs font-medium bg-white text-black rounded-lg px-3 py-1.5 hover:bg-red-50 hover:text-red-600 transition-colors"
                         >
                             <X className="size-3.5" />
@@ -82,6 +91,7 @@ export default function ImageUploader() {
                     onClientUploadComplete={(res) => {
                         setIsUploading(false)
                         setImageUrl(res[0].url)
+                        onChange(res[0].url)
                         toast.success("Imagen subida correctamente")
                     }}
                     onUploadError={() => {

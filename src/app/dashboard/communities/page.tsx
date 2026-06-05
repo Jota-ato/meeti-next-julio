@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Heading } from "@/shared/components/typography/heading";
 import { Button } from "@/shared/components/ui/button";
 import { Container } from "@/shared/components/ui/container";
+import { MyCommunities } from "@/features/communities/components/my-communities";
+import { Separator } from "@/shared/components/ui/separator";
 
 const title = 'Administra tus comunidades'
 
@@ -34,6 +36,9 @@ export default function ComunitiesPage() {
                     </Link>
                 </Button>
             </div>
+            <Separator className="my-8" />
+            <MyCommunities />
+
         </Container>
     )
 }
