@@ -9,9 +9,10 @@ import {
     DropdownMenuTrigger,
 } from "@/shared/components/ui/dropdown-menu"
 import { Button } from "@/shared/components/ui/button"
+import { SelectCommunity } from "../types/community.types";
 
 type Props = {
-    community: any
+    community: SelectCommunity
 }
 
 export function CommunityDropdownMenu({ community }: Props) {
@@ -37,7 +38,7 @@ export function CommunityDropdownMenu({ community }: Props) {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild>
-                    <Link href={`/dashboard/communities`}>
+                    <Link href={`/dashboard/communities/${community.id}/edit`}>
                         Editar <span className="sr-only">, {community.name}</span>
                     </Link>
                 </DropdownMenuItem>

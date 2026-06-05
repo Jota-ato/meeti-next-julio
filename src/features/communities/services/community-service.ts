@@ -3,6 +3,8 @@ import { CommunityType } from "../schemas/comunity-schema";
 import { communityRepository, ICommunityRepository } from "./community-repository";
 import { CommunityPolicy } from "../policies/community-policy";
 import { MembershipPolicy } from "../policies/membership-policy";
+import { SelectCommunity } from "../types/community.types";
+import { notFound } from "next/navigation";
 
 class CommunityService {
     constructor(
@@ -14,6 +16,15 @@ class CommunityService {
             ...data,
             createdBy: userId
         })
+    }
+
+    async editCommunity(data: CommunityType, user: User, communityId: SelectCommunity['id']) { 
+        const community = await this.getCommunity(communityId)
+        if (!CommunityPolicy.canEdit(user, community)) { 
+            throw new Error('No tienes permisos para actualizar esta communidad')
+        }
+
+        await this.communityRepository.update(data, community.id) 
     }
 
     async getUserCommunities(user: User) {
@@ -37,6 +48,33 @@ class CommunityService {
             }
         }))
         return enriched
+    }
+
+    async getCommunity(communityId: SelectCommunity['id']) {
+        const community = await this.communityRepository.findById(communityId)
+        if (!community) notFound()
+        return community
+    }
+
+    async getCommunityDetails(communityId: SelectCommunity['id'], user: User) {
+
+        const community = await this.getCommunity(communityId)
+        const isMember = false
+
+        return {
+            data: community,
+            context: {
+                isMember,
+                isAdmin: CommunityPolicy.isAdmin(user, community)
+            },
+            permissions: {
+                canEdit: CommunityPolicy.canEdit(user, community),
+                canDelete: CommunityPolicy.canDelete(user, community),
+                canJoin: MembershipPolicy.canJoin(user, community, isMember),
+                canLeave: MembershipPolicy.canLeave(user, community, isMember),
+                canViewMembers: CommunityPolicy.canViewMembers(user, community)
+            }
+        }
     }
 }
 

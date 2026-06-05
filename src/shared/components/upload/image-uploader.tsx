@@ -8,12 +8,14 @@ import Image from "next/image";
 
 export default function ImageUploader({
     label,
-    onChange
+    onChange,
+    image
 }: {
     label: string
     onChange: (url: string | null) => void
+    image?: string
 }) {
-    const [imageUrl, setImageUrl] = useState<string | null>(null)
+    const [imageUrl, setImageUrl] = useState<string | null>(image ?? '')
     const [isUploading, setIsUploading] = useState(false)
 
     return (
@@ -90,8 +92,8 @@ export default function ImageUploader({
                     }}
                     onClientUploadComplete={(res) => {
                         setIsUploading(false)
-                        setImageUrl(res[0].url)
-                        onChange(res[0].url)
+                        setImageUrl(res[0].ufsUrl)
+                        onChange(res[0].ufsUrl)
                         toast.success("Imagen subida correctamente")
                     }}
                     onUploadError={() => {

@@ -1,4 +1,4 @@
-import { CreateCommunitie } from "@/features/communities/components/create-communitie";
+import { CommunityFormCard } from "@/features/communities/components/community-form-card";
 import { Heading } from "@/shared/components/typography/heading";
 import { Button } from "@/shared/components/ui/button";
 import { Container } from "@/shared/components/ui/container";
@@ -31,7 +31,7 @@ export default function CreateCommunitiePage() {
                 </Button>
             </Container>
             <Container className="my-12">
-                <CreateCommunitie />
+                <CommunityFormCard />
             </Container>
         </>
     )
