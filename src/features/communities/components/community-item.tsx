@@ -10,7 +10,7 @@ export function CommunityItem({
     community: CommunityWithPermissions
 }) {
 
-    const { image, name, description } = community.data
+    const { image, name, description, id } = community.data
 
     return (
         <li className="flex justify-between gap-x-6 py-5">
@@ -27,7 +27,7 @@ export function CommunityItem({
                 <article className="flex flex-col p-5 flex-1">
                     <header className="p-0 flex flex-col gap-y-1">
                         <Button className="block px-0 text-accent-foreground" asChild variant={'link'}>
-                            <Link className="" href={'/dashboard/communities'}>
+                            <Link className="/" href={`/communities/${id}`}>
                                 {name}
                             </Link>
                         </Button>

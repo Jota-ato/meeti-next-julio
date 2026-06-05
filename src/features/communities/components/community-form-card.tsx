@@ -5,7 +5,7 @@ import {
     CardHeader,
     CardTitle
 } from "@/shared/components/ui/card";
-import { CommunitieForm } from "./communitie-form";
+import { CommunitieForm } from "./community-form";
 import { SelectCommunity } from "../types/community.types";
 
 export function CommunityFormCard({
