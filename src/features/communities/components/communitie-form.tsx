@@ -10,6 +10,8 @@ import { SubmitButton } from "@/shared/components/forms/submit-button";
 import { createCommunityAction } from "../actions/community-actions";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
+import { UploadDropzone } from "@/shared/utils/uploadthing";
+import ImageUploader from "./image-uploader";
 
 type fieldType = {
     label: string
@@ -41,6 +43,7 @@ export function CommunitieForm() {
         if (!success) toast.error(message)
         else {
             toast.success(message)
+            reset()
             redirect('/dashboard/communities')
         }
     }
@@ -59,6 +62,7 @@ export function CommunitieForm() {
                             textarea={field.textArea}
                         />
                     ))}
+                    <ImageUploader />
                     <SubmitButton
                         isSubmitting={isSubmitting}
                         label="Crear comunidad"
