@@ -5,7 +5,9 @@ const protectedRoutes = ["/dashboard", "/dashboard/(.*)"]
 const authRoutes = ["/auth", "/auth/(.*)"]
 
 export function proxy(request: NextRequest) {
-    const sessionCookie = getSessionCookie(request)
+    const sessionCookie =
+        request.cookies.get("better-auth.session_token") ||
+        request.cookies.get("__Secure-better-auth.session_token")
     const pathname = request.nextUrl.pathname
 
     const isProtectedRoute = protectedRoutes.some(route =>
