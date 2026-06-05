@@ -112,7 +112,7 @@ class AuthService {
         }
     }
 
-    async setNewNewPassword({ newPassword }: ResetPasswordType, token: string): ActionResponse { 
+    async setNewPassword({ newPassword }: ResetPasswordType, token: string): ActionResponse {
         try {
             await auth.api.resetPassword({
                 body: {
@@ -125,7 +125,7 @@ class AuthService {
                 message: 'Contraseña restablecida correctamente'
             }
         } catch (error) {
-            if (error instanceof APIError) { 
+            if (error instanceof APIError) {
                 return {
                     success: false,
                     message: 'Token no válido o expirado'

@@ -13,15 +13,21 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
         requireEmailVerification: true,
-        sendResetPassword: async ({ user: { name, email }, url }) => { 
-            await AuthEmailService.sendPasswordResetToken({name, email, url})
+        sendResetPassword: async ({ user: { name, email }, url }) => {
+            await AuthEmailService.sendPasswordResetToken({ name, email, url })
         }
+    },
+    socialProviders: {
+        google: {
+            clientId: process.env.GOOGLE_CLIENT_ID as string,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+        },
     },
     emailVerification: {
         sendOnSignIn: true,
         sendOnSignUp: true,
         autoSignInAfterVerification: true,
-        sendVerificationEmail: async ({ user: { name, email }, url }) => { 
+        sendVerificationEmail: async ({ user: { name, email }, url }) => {
             await AuthEmailService.sendVerificationEmail({
                 email,
                 name,

@@ -11,6 +11,7 @@ import { signInAction } from "../actions/auth-actions";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "@/shared/components/forms/submit-button";
+import SignInGoogleButton from "@/features/auth/components/google-auth-button";
 
 type FieldConfig = {
     label: string
@@ -48,7 +49,7 @@ export function SignInForm() {
             toast.success(message)
             reset()
             redirect('/dashboard')
-        } else { 
+        } else {
             toast.error(message)
         }
     }
@@ -81,16 +82,17 @@ export function SignInForm() {
                                 />
                             ))}
                         </FieldGroup>
+                        <SubmitButton
+                            isSubmitting={isSubmitting}
+                            loadingLabel="Iniciando..."
+                            label="Iniciar sesión"
+                        />
                     </FieldSet>
                 </CardContent>
-                <CardFooter className="mt-8">
-                    <SubmitButton
-                        isSubmitting={isSubmitting}
-                        loadingLabel="Iniciando..."
-                        label="Iniciar sesión"
-                    />
-                </CardFooter>
             </Form>
+            <CardFooter>
+                <SignInGoogleButton />
+            </CardFooter>
         </Card>
     )
 }

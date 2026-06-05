@@ -2,7 +2,7 @@
 
 import { Form } from "@/shared/components/forms/Form";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui/card";
-import { FieldGroup } from "@/shared/components/ui/field";
+import { FieldGroup, FieldSet } from "@/shared/components/ui/field";
 import { SignUpSchema, SignUpType } from "../schemas/auth-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -10,6 +10,7 @@ import { FieldWLabel } from "@/shared/components/forms/field-w-label";
 import { signUpAction } from "../actions/auth-actions";
 import { toast } from "sonner";
 import { SubmitButton } from "@/shared/components/forms/submit-button";
+import GoogleAuthButton from "./google-auth-button";
 
 type FieldConfig = {
     label: string
@@ -42,7 +43,7 @@ export function SignUpForm() {
         if (success) {
             toast.success(message)
             reset()
-        } else { 
+        } else {
             toast.error(message)
         }
     }
@@ -54,28 +55,31 @@ export function SignUpForm() {
             </CardHeader>
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <CardContent>
-                    <FieldGroup>
-                        {fields.map(({ id, label, type, placeholder }) => (
-                            <FieldWLabel
-                                key={id}
-                                id={id}
-                                label={label}
-                                type={type}
-                                placeholder={placeholder}
-                                error={errors[id]?.message}
-                                {...register(id)}
+                    <FieldSet>
+                        <FieldGroup>
+                            {fields.map(({ id, label, type, placeholder }) => (
+                                <FieldWLabel
+                                    key={id}
+                                    id={id}
+                                    label={label}
+                                    type={type}
+                                    placeholder={placeholder}
+                                    error={errors[id]?.message}
+                                    {...register(id)}
+                                />
+                            ))}
+                            <SubmitButton
+                                isSubmitting={isSubmitting}
+                                label="Crear cuenta"
+                                loadingLabel="Creando..."
                             />
-                        ))}
-                    </FieldGroup>
+                        </FieldGroup>
+                    </FieldSet>
                 </CardContent>
-                <CardFooter className="mt-8">
-                    <SubmitButton
-                        isSubmitting={isSubmitting}
-                        label="Crear cuenta"
-                        loadingLabel="Creando..."
-                    />
-                </CardFooter>
             </Form>
+            <CardFooter>
+                <GoogleAuthButton mode="signup" />
+            </CardFooter>
         </Card>
     )
 }

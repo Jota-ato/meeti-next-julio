@@ -1,5 +1,4 @@
 "use server"
-
 import { ForgotPasswordSchema, ForgotPasswordType, ResetPasswordSchema, ResetPasswordType, SignInSchema, SignInType, SignUpSchema, SignUpType } from "../schemas/auth-schema";
 import { authService } from "../services/auth-service";
 import { ActionResponse } from "../types/auth.types";
@@ -54,5 +53,5 @@ export async function setNewPasswordAction(input: ResetPasswordType, token: stri
         }
     }
 
-    return await authService.setNewNewPassword(input, token)
+    return await authService.setNewPassword(input, token)
 }
