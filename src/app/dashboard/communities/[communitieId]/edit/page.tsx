@@ -41,7 +41,7 @@ export default async function EditCommunityPage(props: PageProps<'/dashboard/com
 
     const community = await communityService.getCommunityDetails(communitieId, session.user)
 
-    if (!community.permissions.canEdit) notFound()
+    if ( !community.permissions || !community.permissions.canEdit) notFound()
 
     return (
         <>
