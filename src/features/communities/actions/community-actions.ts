@@ -5,6 +5,7 @@ import { CommunitySchema, CommunityType } from "../schemas/comunity-schema";
 import { communityService } from "../services/community-service";
 import { ActionResponse } from "@/features/auth/types/auth.types";
 import { SelectCommunity } from "../types/community.types";
+import { CheckPasswordSchema, CheckPasswordType } from "@/features/auth/schemas/auth-schema";
 
 export async function createCommunityAction(input: CommunityType): ActionResponse {
     const zodResponse = CommunitySchema.safeParse(input)
@@ -55,7 +56,29 @@ export async function editCommunityAction(input: CommunityType, communityId: Sel
     await communityService.editCommunity(input, session.user, communityId)
 
     return {
-        success: true, 
+        success: true,
         message: 'Comunidad actualizada correctamente'
     }
+}
+
+export async function deleteCommunityAction(input: CheckPasswordType, communityId: SelectCommunity['id']): ActionResponse {
+    const zodResponse = CheckPasswordSchema.safeParse(input)
+
+    if (zodResponse.error) {
+        return {
+            success: false,
+            message: 'Hubo un error'
+        }
+    }
+
+    const { session } = await requireAuth()
+
+    if (!session) {
+        return {
+            success: false,
+            message: 'No tienes autenticación para realizarlo'
+        }
+    }
+
+    return await communityService.deleteCommunity(communityId, input.password, session.user)
 }

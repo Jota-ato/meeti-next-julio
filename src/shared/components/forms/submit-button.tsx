@@ -5,11 +5,13 @@ interface Props {
     isSubmitting: boolean
     label: string
     loadingLabel: string
+    destructive?: boolean
 }
 
-export function SubmitButton({ isSubmitting, label, loadingLabel }: Props) {
+export function SubmitButton({ isSubmitting, label, loadingLabel, destructive = false }: Props) {
     return (
         <Button
+            variant={destructive ? 'destructive' : 'default'}
             disabled={isSubmitting}
             type="submit"
             className="w-full disabled:cursor-not-allowed opacity-90"

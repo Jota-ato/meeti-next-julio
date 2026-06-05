@@ -10,12 +10,16 @@ import {
 } from "@/shared/components/ui/dropdown-menu"
 import { Button } from "@/shared/components/ui/button"
 import { SelectCommunity } from "../types/community.types";
+import { useCommunityStore } from "../stores/community.store";
 
 type Props = {
     community: SelectCommunity
 }
 
 export function CommunityDropdownMenu({ community }: Props) {
+
+    const { toggleOpen, setCommunity } = useCommunityStore()
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -44,7 +48,10 @@ export function CommunityDropdownMenu({ community }: Props) {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
-                    onClick={() => { console.log("Eliminar", community.id) }}
+                    onClick={() => {
+                        toggleOpen()
+                        setCommunity(community)
+                    }}
                     className="text-destructive cursor-pointer hover:bg-destructive/10! hover:text-destructive!"
                 >
                     Eliminar <span className="sr-only">, {community.name}</span>

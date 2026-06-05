@@ -5,6 +5,8 @@ import { CommunityPolicy } from "../policies/community-policy";
 import { MembershipPolicy } from "../policies/membership-policy";
 import { SelectCommunity } from "../types/community.types";
 import { notFound } from "next/navigation";
+import { checkPassword } from "@/shared/utils/auth";
+import { success } from "better-auth";
 
 class CommunityService {
     constructor(
@@ -18,13 +20,13 @@ class CommunityService {
         })
     }
 
-    async editCommunity(data: CommunityType, user: User, communityId: SelectCommunity['id']) { 
+    async editCommunity(data: CommunityType, user: User, communityId: SelectCommunity['id']) {
         const community = await this.getCommunity(communityId)
-        if (!CommunityPolicy.canEdit(user, community)) { 
+        if (!CommunityPolicy.canEdit(user, community)) {
             throw new Error('No tienes permisos para actualizar esta communidad')
         }
 
-        await this.communityRepository.update(data, community.id) 
+        await this.communityRepository.update(data, community.id)
     }
 
     async getUserCommunities(user: User) {
@@ -74,6 +76,29 @@ class CommunityService {
                 canLeave: MembershipPolicy.canLeave(user, community, isMember),
                 canViewMembers: CommunityPolicy.canViewMembers(user, community)
             }
+        }
+    }
+
+    async deleteCommunity(communityId: SelectCommunity['id'], password: string, user: User) {
+        const community = await this.getCommunity(communityId)
+
+        if (!CommunityPolicy.canDelete(user, community)) {
+            throw new Error('No tienes permisos para eliminar esta communidad')
+        }
+
+        const isValidPassword = await checkPassword(password)
+
+        if (!isValidPassword) {
+            return {
+                success: false,
+                message: 'La contraseña es incorrecta'
+            }
+        }
+
+        await this.communityRepository.delete(communityId)
+        return {
+            success: true,
+            message: 'Communidad eliminada correctamente'
         }
     }
 }

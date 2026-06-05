@@ -12,8 +12,25 @@ import { notFound, redirect } from "next/navigation";
 
 const title = 'Editar communidad'
 
-export const metadata: Metadata = {
-    title
+export async function generateMetadata(
+    props: PageProps<'/dashboard/communities/[communitieId]/edit'>
+): Promise<Metadata> { 
+
+    const { communitieId } = await props.params    
+    const result = await communityService.getCommunity(communitieId)
+
+    return {
+        title: `${title}: ${result.name}`,
+        description: result.description,
+        openGraph: {
+            title: 'Compartir comunidad',
+            images: [
+                {
+                    url: result.image
+                }
+            ]
+        }
+    }
 }
 
 export default async function EditCommunityPage(props: PageProps<'/dashboard/communities/[communitieId]/edit'>) {

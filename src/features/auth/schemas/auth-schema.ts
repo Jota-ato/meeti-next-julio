@@ -44,7 +44,12 @@ export const ResetPasswordSchema = z.object({
     }
 )
 
+export const CheckPasswordSchema = z.object({
+    password: z.string().min(1, { message: 'La contraseña es requerida' })
+})
+
 export type SignInType = z.infer<typeof SignInSchema>
 export type SignUpType = z.infer<typeof SignUpSchema>
 export type ForgotPasswordType = z.infer<typeof ForgotPasswordSchema>
 export type ResetPasswordType = z.infer<typeof ResetPasswordSchema>
+export type CheckPasswordType = z.infer<typeof CheckPasswordSchema>

@@ -5,6 +5,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Container } from "@/shared/components/ui/container";
 import { MyCommunities } from "@/features/communities/components/my-communities";
 import { Separator } from "@/shared/components/ui/separator";
+import DeleteCommunityModal from "@/features/communities/components/delete-community-modal";
 
 const title = 'Administra tus comunidades'
 
@@ -38,7 +39,7 @@ export default function ComunitiesPage() {
             </div>
             <Separator className="my-8" />
             <MyCommunities />
-
+            <DeleteCommunityModal />
         </Container>
     )
 }

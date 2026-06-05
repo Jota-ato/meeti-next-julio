@@ -5,11 +5,14 @@ import { User } from "@/features/auth/types/auth.types";
 import { eq } from "drizzle-orm";
 import { CommunityType } from "../schemas/comunity-schema";
 
+export type CommunityId = SelectCommunity['id']
+
 export interface ICommunityRepository {
     createCommunity: (data: InsertCommunity) => Promise<SelectCommunity>
     findByUser: (userId: User['id'], limit?: number) => Promise<SelectCommunity[]>
-    findById: (communityId: SelectCommunity['id']) => Promise<SelectCommunity | undefined>
-    update: (data: CommunityType, communityId: SelectCommunity['id']) => Promise<void>
+    findById: (communityId: CommunityId) => Promise<SelectCommunity | undefined>
+    update: (data: CommunityType, communityId: CommunityId) => Promise<void>
+    delete: (communityId: CommunityId) => Promise<void>
 }
 
 class CommunityRepository implements ICommunityRepository {
@@ -46,6 +49,12 @@ class CommunityRepository implements ICommunityRepository {
             .set({
                 ...data
             })
+            .where(eq(community.id, communityId))
+    }
+
+    async delete(communityId: CommunityId) { 
+        await db
+            .delete(community)
             .where(eq(community.id, communityId))
     }
 }
