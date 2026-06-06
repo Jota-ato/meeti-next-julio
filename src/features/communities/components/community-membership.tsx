@@ -20,10 +20,12 @@ export function CommunityMembership({
 
     const handleClick = async () => {
         const result = await toggleMembershipAction(communityId)
-        setCanJoin(prev => !prev)
-        setCanLeave(prev => !prev)
 
-        if (result.success) toast.success(result.message)
+        if (result.success) {
+            toast.success(result.message)
+            setCanJoin(prev => result.newPermissions?.canJoin ?? prev)
+            setCanLeave(prev => result.newPermissions?.canLeave ?? prev)
+        }
         else toast.error(result.message) 
     }
 

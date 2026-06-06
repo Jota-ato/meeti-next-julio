@@ -1,7 +1,6 @@
-import { ActionResponse, User } from "@/features/auth/types/auth.types";
+import { User } from "@/features/auth/types/auth.types";
 import { CommunityId, communityRepository, ICommunityRepository } from "./community-repository";
 import { IMembershipRepository, membershipRepository } from "./membership-repository";
-import { notFound } from "next/navigation";
 import { MembershipPolicy } from "../policies/membership-policy";
 
 class MembershipService {
@@ -11,7 +10,7 @@ class MembershipService {
         private communityRepository: ICommunityRepository
     ) { }
 
-    async toggleMembership(communityId: CommunityId, user: User): ActionResponse {
+    async toggleMembership(communityId: CommunityId, user: User) {
         const community = await this.communityRepository.findById(communityId)
         if (!community) { 
             return {
@@ -26,7 +25,11 @@ class MembershipService {
             await this.membershipRepository.addMember(communityId, user.id)
             return {
                 success: true,
-                message: `Te has unido a la comunidad ${community.name}`
+                message: `Te has unido a la comunidad ${community.name}`,
+                newPermissions: {
+                    canJoin: false,
+                    canLeave: true
+                }
             }
         }
 
@@ -34,7 +37,11 @@ class MembershipService {
             await this.membershipRepository.removeMember(communityId, user.id)
             return {
                 success: true,
-                message: `Haz salido a la comunidad ${community.name}`
+                message: `Haz salido a la comunidad ${community.name}`,
+                newPermissions: {
+                    canJoin: true,
+                    canLeave: false
+                }
             }
         }
 

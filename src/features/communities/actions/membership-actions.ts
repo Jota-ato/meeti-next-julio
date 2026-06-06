@@ -3,9 +3,8 @@
 import { requireAuth } from "@/lib/auth-server";
 import { CommunityId } from "../services/community-repository";
 import { membershipService } from "../services/membership-service";
-import { ActionResponse } from "@/features/auth/types/auth.types";
 
-export async function toggleMembershipAction(communityId: CommunityId): ActionResponse { 
+export async function toggleMembershipAction(communityId: CommunityId) { 
     const { session } = await requireAuth()
 
     if (!session) throw new Error('Usuario no autenticado')
