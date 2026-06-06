@@ -7,6 +7,10 @@ import { CommunityType } from "../schemas/comunity-schema";
 
 export type CommunityId = SelectCommunity['id']
 
+/**
+ * Interface defining the contract for Community data persistence.
+ * Ensures dependency inversion for testing and service layer isolation.
+ */
 export interface ICommunityRepository {
     createCommunity: (data: InsertCommunity) => Promise<SelectCommunity>
     findByUser: (userId: User['id'], limit?: number) => Promise<SelectCommunity[]>
@@ -15,44 +19,72 @@ export interface ICommunityRepository {
     delete: (communityId: CommunityId) => Promise<void>
 }
 
+/**
+ * Concrete implementation of the Community Repository using Drizzle ORM.
+ * Interacts directly with the Neon database.
+ * @implements {ICommunityRepository}
+ */
 class CommunityRepository implements ICommunityRepository {
-    async createCommunity(data: InsertCommunity) {
-        return (await db.
-            insert(community).
-            values(data)
+    /**
+     * Inserts a new community record into the database.
+     * * @param {InsertCommunity} data - The payload required to create a community.
+     * @returns {Promise<SelectCommunity>} The newly created community record.
+     */
+    async createCommunity(data: InsertCommunity): Promise<SelectCommunity> {
+        return (await db
+            .insert(community)
+            .values(data)
             .returning()
         )[0]
     }
 
-    async findByUser(userId: User['id'], limit: number = 10) {
-        return await
-            db.
-                select()
-                .from(community)
-                .where(eq(community.createdBy, userId))
-                .limit(limit)
+    /**
+     * Retrieves a list of communities created by a specific user.
+     *  @param {User['id']} userId - The unique identifier of the user (creator).
+     * @param {number} [limit=10] - Maximum number of records to retrieve.
+     * @returns {Promise<SelectCommunity[]>} An array of matched communities.
+     */
+    async findByUser(userId: User['id'], limit: number = 10): Promise<SelectCommunity[]> {
+        return await db
+            .select()
+            .from(community)
+            .where(eq(community.createdBy, userId))
+            .limit(limit)
     }
 
-    async findById(communityId: SelectCommunity['id']) {
-        return (await
-            db.
-                select()
-                .from(community).
-                where(eq(community.id, communityId))
-                .limit(1)
+    /**
+     * Finds a single community by its unique identifier.
+     * @param {CommunityId} communityId - The UUID/ID of the community.
+     * @returns {Promise<SelectCommunity | undefined>} The community if found, otherwise undefined.
+     */
+    async findById(communityId: CommunityId): Promise<SelectCommunity | undefined> {
+        return (await db
+            .select()
+            .from(community)
+            .where(eq(community.id, communityId))
+            .limit(1)
         )[0]
     }
 
-    async update(data: CommunityType, communityId: SelectCommunity['id']) { 
+    /**
+     * Updates an existing community's details.
+     * @param {CommunityType} data - The validated payload containing updated fields.
+     * @param {CommunityId} communityId - The ID of the community to update.
+     * @returns {Promise<void>}
+     */
+    async update(data: CommunityType, communityId: CommunityId): Promise<void> {
         await db
             .update(community)
-            .set({
-                ...data
-            })
+            .set({ ...data })
             .where(eq(community.id, communityId))
     }
 
-    async delete(communityId: CommunityId) { 
+    /**
+     * Hard deletes a community record from the database.
+     * @param {CommunityId} communityId - The ID of the community to delete.
+     * @returns {Promise<void>}
+     */
+    async delete(communityId: CommunityId): Promise<void> {
         await db
             .delete(community)
             .where(eq(community.id, communityId))
