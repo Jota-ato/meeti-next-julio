@@ -7,10 +7,12 @@ import { SelectCommunity } from "../types/community.types";
 import { notFound } from "next/navigation";
 import { checkPassword } from "@/shared/utils/auth";
 import { deleteUTFiles } from "@/lib/uploadthing-server";
+import { IMembershipRepository, membershipRepository } from "./membership-repository";
 
 class CommunityService {
     constructor(
-        private communityRepository: ICommunityRepository
+        private communityRepository: ICommunityRepository,
+        private membershiptRepository: IMembershipRepository
     ) { }
 
     async createCommunity(data: CommunityType, userId: string) {
@@ -61,15 +63,16 @@ class CommunityService {
     async getCommunityDetails(communityId: SelectCommunity['id'], user?: User) {
 
         const community = await this.getCommunity(communityId)
-        const isMember = false
-
-        if (!user) { 
+        
+        if (!user) {
             return {
                 data: community,
                 context: null,
                 permissions: null
             }
         }
+
+        const isMember = await this.membershiptRepository.isMember(communityId, user.id)
 
         return {
             data: community,
@@ -112,4 +115,4 @@ class CommunityService {
     }
 }
 
-export const communityService = new CommunityService(communityRepository)
+export const communityService = new CommunityService(communityRepository, membershipRepository)

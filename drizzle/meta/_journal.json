@@ -29,6 +29,13 @@
       "when": 1780674596149,
       "tag": "0003_daily_ogun",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1780702586699,
+      "tag": "0004_furry_may_parker",
+      "breakpoints": true
     }
   ]
 }
