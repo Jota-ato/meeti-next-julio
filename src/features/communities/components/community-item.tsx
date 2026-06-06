@@ -41,9 +41,11 @@ export function CommunityItem({
                     </main>
                 </article>
 
-                <div className="flex shrink-0 items-center">
-                    <CommunityDropdownMenu community={community.data} />
-                </div>
+                {community.permissions.canEdit && (
+                    <div className="flex shrink-0 items-center">
+                        <CommunityDropdownMenu community={community.data} />
+                    </div>
+                )}
             </div>
         </li>
     )

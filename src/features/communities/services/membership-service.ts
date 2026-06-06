@@ -2,6 +2,7 @@ import { User } from "@/features/auth/types/auth.types";
 import { CommunityId, communityRepository, ICommunityRepository } from "./community-repository";
 import { IMembershipRepository, membershipRepository } from "./membership-repository";
 import { MembershipPolicy } from "../policies/membership-policy";
+import { CommunityPolicy } from "../policies/community-policy";
 
 /**
  * Service layer responsible for business logic related to community memberships.
@@ -28,7 +29,7 @@ class MembershipService {
      */
     async toggleMembership(communityId: CommunityId, user: User) {
         const community = await this.communityRepository.findById(communityId)
-        if (!community) { 
+        if (!community) {
             return {
                 success: false,
                 message: 'Ocurrió un error' // Community not found
@@ -68,6 +69,30 @@ class MembershipService {
             success: false,
             message: 'Ocurrió un error'
         }
+    }
+
+    async getJoinedCommunities(user: User) {
+        const joined = await this.membershipRepository.findJoinedCommunities(user.id)
+
+        const enriched = await Promise.all(joined.map(async ({community, user}) => {
+            
+            const isMember = await this.membershipRepository.isMember(community.id, user.id)
+            return {
+                data: community,
+                context: {
+                    isMember,
+                    isAdmin: CommunityPolicy.isAdmin(user, community)
+                },
+                permissions: {
+                    canEdit: CommunityPolicy.canEdit(user, community),
+                    canDelete: CommunityPolicy.canDelete(user, community),
+                    canJoin: MembershipPolicy.canJoin(user, community, isMember),
+                    canLeave: MembershipPolicy.canLeave(user, community, isMember),
+                    canViewMembers: CommunityPolicy.canViewMembers(user, community)
+                }
+            }
+        }))
+        return enriched
     }
 }
 

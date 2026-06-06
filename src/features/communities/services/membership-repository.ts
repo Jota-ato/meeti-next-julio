@@ -3,6 +3,7 @@ import { CommunityId } from "./community-repository";
 import { db } from "@/db";
 import { communityMembers } from "@/db/schema/community";
 import { and, eq } from "drizzle-orm";
+import { JoinedCommunity } from "../types/community.types";
 
 /**
  * Interface defining the contract for Membership data persistence.
@@ -12,6 +13,7 @@ export interface IMembershipRepository {
     addMember: (communityId: CommunityId, userId: User['id']) => Promise<void>
     removeMember: (communityId: CommunityId, userId: User['id']) => Promise<void>
     isMember: (communityId: CommunityId, userId: User['id']) => Promise<boolean>
+    findJoinedCommunities: (userId: User['id']) => Promise<JoinedCommunity[]>
 }
 
 /**
@@ -70,6 +72,18 @@ class MembershipRepository implements IMembershipRepository {
                     eq(communityMembers.userId, userId),
                 )
             )).length > 0
+    }
+
+    async findJoinedCommunities(userId: User['id']) {
+        return await db
+            .query
+            .communityMembers.findMany({
+                where: (members, { eq }) => eq(members.userId, userId),
+                with: {
+                    community: true,
+                    user: true
+                }
+            })
     }
 }
 
