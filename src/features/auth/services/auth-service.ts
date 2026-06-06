@@ -5,14 +5,29 @@ import { ActionResponse } from "../types/auth.types";
 import { headers } from "next/headers";
 import { APIError } from "better-auth";
 
+/**
+ * Service layer responsible for orchestrating authentication workflows.
+ * Wraps `better-auth` API calls and translates domain errors into predictable 
+ * `ActionResponse` objects tailored for Next.js Server Actions.
+ */
 class AuthService {
-
+    /**
+     * Injects the authentication repository.
+     * @param {IAuthRepository} authRepository - Repository for user queries.
+     */
     constructor(
         private authRepository: IAuthRepository
     ) { }
 
-    async signUp({ name, email, password }: SignUpType): ActionResponse {
-        // Revisar si el usuario existe
+    /**
+     * Handles the user registration flow via email and password.
+     * * @todo Architectural smell: `headers()` is a Next.js specific API. 
+     * Pass headers as an argument from the Server Action to keep this service framework-agnostic.
+     * * @param {SignUpType} payload - The validated user registration data.
+     * @returns {Promise<ActionResponse>} The result of the operation.
+     */
+    async signUp({ name, email, password }: SignUpType): Promise<ActionResponse> {
+        // Verify uniqueness
         const userExists = await this.authRepository.userExists(email)
         if (userExists) {
             return {
@@ -21,7 +36,7 @@ class AuthService {
             }
         }
 
-        // Manejar el registro
+        // Handle registration via better-auth
         await auth.api.signUpEmail({
             body: {
                 name,
@@ -38,8 +53,14 @@ class AuthService {
         }
     }
 
-    async signIn({ email, password }: SignInType): ActionResponse {
-        // Revisar si el no usuario existe
+    /**
+     * Authenticates a user using email and password credentials.
+     * Maps `better-auth` HTTP errors to localized, user-friendly messages.
+     * * @param {SignInType} payload - The validated login credentials.
+     * @returns {Promise<ActionResponse>} The result object indicating success or mapped error.
+     */
+    async signIn({ email, password }: SignInType): Promise<ActionResponse> {
+        // Pre-flight check to prevent unnecessary crypto operations if user doesn't exist
         const userExists = await this.authRepository.userExists(email)
         if (!userExists) {
             return {
@@ -65,16 +86,16 @@ class AuthService {
             }
 
         } catch (error) {
-            let message = 'Error al iniciar sesion'
+            let message = 'Error al iniciar sesión'
 
-
+            // Type-safe error handling for better-auth exceptions
             if (error instanceof APIError) {
                 const messagesMap: Record<number, string> = {
                     401: 'Usuario o contraseña incorrectos',
                     403: 'Tu cuenta no ha sido confirmada aún. Revisa tu email'
                 }
                 console.error(error.message)
-                message = messagesMap[error.statusCode]
+                message = messagesMap[error.statusCode] || message
             }
 
             return {
@@ -84,7 +105,12 @@ class AuthService {
         }
     }
 
-    async requestPasswordReset({ email }: ForgotPasswordType): ActionResponse {
+    /**
+     * Initiates the password reset workflow by sending a recovery email.
+     * * @param {ForgotPasswordType} payload - The email address requesting the reset.
+     * @returns {Promise<ActionResponse>}
+     */
+    async requestPasswordReset({ email }: ForgotPasswordType): Promise<ActionResponse> {
         const user = await this.authRepository.userExists(email)
 
         if (!user) {
@@ -96,9 +122,7 @@ class AuthService {
 
         try {
             await auth.api.requestPasswordReset({
-                body: {
-                    email
-                }
+                body: { email }
             })
             return {
                 success: true,
@@ -112,7 +136,13 @@ class AuthService {
         }
     }
 
-    async setNewPassword({ newPassword }: ResetPasswordType, token: string): ActionResponse {
+    /**
+     * Finalizes the password reset process using a cryptographic token.
+     * * @param {ResetPasswordType} payload - Contains the new password.
+     * @param {string} token - The secure token extracted from the recovery URL.
+     * @returns {Promise<ActionResponse>}
+     */
+    async setNewPassword({ newPassword }: ResetPasswordType, token: string): Promise<ActionResponse> {
         try {
             await auth.api.resetPassword({
                 body: {
@@ -133,7 +163,7 @@ class AuthService {
             }
             return {
                 success: false,
-                message: ''
+                message: 'Ocurrió un error inesperado'
             }
         }
     }
