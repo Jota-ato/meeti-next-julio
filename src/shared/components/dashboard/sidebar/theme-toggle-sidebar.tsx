@@ -13,20 +13,34 @@ import {
 } from "@/shared/components/ui/sidebar";
 import { ChevronDown, Sun, Moon, Monitor, Palette } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 export function ThemeToggleSideBar({
     isCollapsed
 }: {
     isCollapsed: boolean
 }) {
-
+    const [mounted, setMounted] = useState(false);
     const { theme, setTheme } = useTheme()
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setMounted(true);
+    }, []);
 
     const themes = [
         { value: 'light', label: 'Claro', icon: Sun },
         { value: 'dark', label: 'Oscuro', icon: Moon },
         { value: 'system', label: 'Sistema', icon: Monitor },
     ]
+
+    if (!mounted) {
+        return (
+            <Collapsible defaultOpen className="group/collapsible opacity-0">
+                 <div className="h-10"></div> 
+            </Collapsible>
+        )
+    }
 
     return (
         <Collapsible defaultOpen className="group/collapsible">
