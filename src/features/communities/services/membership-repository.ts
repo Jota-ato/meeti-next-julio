@@ -2,7 +2,7 @@ import { User } from "@/features/auth/types/auth.types";
 import { CommunityId } from "./community-repository";
 import { db } from "@/db";
 import { communityMembers } from "@/db/schema/community";
-import { and, eq } from "drizzle-orm";
+import { and, count, eq } from "drizzle-orm";
 import { JoinedCommunity } from "../types/community.types";
 
 /**
@@ -14,6 +14,7 @@ export interface IMembershipRepository {
     removeMember: (communityId: CommunityId, userId: User['id']) => Promise<void>
     isMember: (communityId: CommunityId, userId: User['id']) => Promise<boolean>
     findJoinedCommunities: (userId: User['id']) => Promise<JoinedCommunity[]>
+    getMemberCount: (communityId: CommunityId) => Promise<number>
 }
 
 /**
@@ -84,6 +85,16 @@ class MembershipRepository implements IMembershipRepository {
                     user: true
                 }
             })
+    }
+
+    async getMemberCount(communityId: CommunityId) { 
+
+        const [result] = await db
+            .select({total: count()})
+            .from(communityMembers)
+            .where(eq(communityMembers.communityId, communityId))
+
+        return result.total
     }
 }
 

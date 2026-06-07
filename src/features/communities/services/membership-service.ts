@@ -77,8 +77,11 @@ class MembershipService {
         const enriched = await Promise.all(joined.map(async ({community, user}) => {
             
             const isMember = await this.membershipRepository.isMember(community.id, user.id)
+            const memberCount = await this.membershipRepository.getMemberCount(community.id)
+
             return {
                 data: community,
+                memberCount,
                 context: {
                     isMember,
                     isAdmin: CommunityPolicy.isAdmin(user, community)

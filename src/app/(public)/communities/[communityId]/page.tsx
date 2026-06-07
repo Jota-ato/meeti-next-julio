@@ -3,8 +3,19 @@ import { communityService } from "@/features/communities/services/community-serv
 import { getServerSession } from "@/lib/auth-server";
 import { Heading } from "@/shared/components/typography/heading";
 import { Container } from "@/shared/components/ui/container";
+import { pluralize } from "@/shared/utils/string";
+import { Metadata } from "next";
 import Image from "next/image";
 
+export async function generateMetadata({ params } : PageProps<'/communities/[communityId]'>): Promise<Metadata> {
+    const { communityId } = await params
+    const community = await communityService.getCommunity(communityId) 
+
+    return {
+        title: community.name,
+        description: community.description,
+    }
+}
 
 export default async function PublicCommuntyPage({
     params
@@ -46,8 +57,11 @@ export default async function PublicCommuntyPage({
                         <Heading level={2} className="text-center">
                             {community.data.name}
                         </Heading>
-                        <p className="text-muted-foreground">
+                        <p className="text-muted-foreground text-center">
                             {community.data.description}
+                        </p>
+                        <p className="text-muted-foreground text-center">
+                            {community.memberCount} {pluralize('Miebro', community.memberCount)}
                         </p>
                     </div>
                     <div className="bg-card p-5 rounded-2xl">

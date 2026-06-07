@@ -3,6 +3,7 @@ import { CommunityWithPermissions } from "../types/community.types";
 import Link from "next/link";
 import { CommunityDropdownMenu } from "./community-dropdown-menu";
 import { Button } from "@/shared/components/ui/button";
+import { pluralize } from "@/shared/utils/string";
 
 export function CommunityItem({
     community
@@ -37,7 +38,7 @@ export function CommunityItem({
                     </header>
 
                     <main className="p-0 mt-2">
-                        <span className="text-xs text-muted-foreground">Comunidad activa</span>
+                        <span className="text-xs text-muted-foreground">{pluralize('Miembro', community.memberCount)}: {community.memberCount}</span>
                     </main>
                 </article>
 

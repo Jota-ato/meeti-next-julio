@@ -65,8 +65,10 @@ class CommunityService {
         const enriched = await Promise.all(communities.map(async (community) => {
             // to accurately reflect if the user is a member, not just the creator.
             const isMember = await this.membershipRepository.isMember(community.id, user.id)
+            const memberCount = await this.membershipRepository.getMemberCount(community.id)
             return {
                 data: community,
+                memberCount,
                 context: {
                     isMember,
                     isAdmin: CommunityPolicy.isAdmin(user, community)
@@ -105,10 +107,12 @@ class CommunityService {
      */
     async getCommunityDetails(communityId: SelectCommunity['id'], user?: User) {
         const community = await this.getCommunity(communityId)
+        const memberCount = await this.membershipRepository.getMemberCount(community.id)
 
         if (!user) {
             return {
                 data: community,
+                memberCount,
                 context: null,
                 permissions: null
             }
@@ -118,6 +122,7 @@ class CommunityService {
 
         return {
             data: community,
+            memberCount,
             context: {
                 isMember,
                 isAdmin: CommunityPolicy.isAdmin(user, community)

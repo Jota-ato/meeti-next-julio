@@ -41,7 +41,7 @@ export default async function JoinedCommunitiesPage() {
             <Separator className="my-8" />
             {
                 communities.length ? (
-                    <ul role="list" className="divide-y divide-gray-100 mt-10 shadow-lg p-10">
+                    <ul role="list" className="divide-y divide-gray-100 mt-10">
                         {communities.map(community => (
                             <CommunityItem
                                 key={community.data.id}
