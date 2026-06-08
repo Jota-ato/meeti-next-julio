@@ -80,7 +80,7 @@ function SidebarNavItem({ item, pathName, isCollapsed }: SidebarNavItemProps) {
                 )}
             >
                 <item.icon className="size-4 sm:size-5 shrink-0" />
-                {!isCollapsed && item.label}
+                {!isCollapsed ? item.label : ''}
             </Link>
         </SidebarMenuItem>
     )

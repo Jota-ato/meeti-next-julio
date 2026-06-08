@@ -3,6 +3,7 @@ import { CommunityId, communityRepository, ICommunityRepository } from "./commun
 import { IMembershipRepository, membershipRepository } from "./membership-repository";
 import { MembershipPolicy } from "../policies/membership-policy";
 import { CommunityPolicy } from "../policies/community-policy";
+import { INotificationRepository, notificationRepository } from "@/features/notifications/services/notification-repository";
 
 /**
  * Service layer responsible for business logic related to community memberships.
@@ -16,7 +17,8 @@ class MembershipService {
      */
     constructor(
         private membershipRepository: IMembershipRepository,
-        private communityRepository: ICommunityRepository
+        private communityRepository: ICommunityRepository,
+        private notificationRepository: INotificationRepository
     ) { }
 
     /**
@@ -32,7 +34,7 @@ class MembershipService {
         if (!community) {
             return {
                 success: false,
-                message: 'Ocurrió un error' // Community not found
+                message: 'Ocurrió un error'
             }
         }
 
@@ -41,6 +43,14 @@ class MembershipService {
         // Handle Joining Logic
         if (MembershipPolicy.canJoin(user, community, isMember)) {
             await this.membershipRepository.addMember(communityId, user.id)
+
+            await this.notificationRepository.create({
+                userId: community.createdBy,
+                actorName: user.name,
+                message: 'Se unió a tu comunidad',
+                target: community.name
+            })
+
             return {
                 success: true,
                 message: `Te has unido a la comunidad ${community.name}`,
@@ -99,4 +109,4 @@ class MembershipService {
     }
 }
 
-export const membershipService = new MembershipService(membershipRepository, communityRepository)
+export const membershipService = new MembershipService(membershipRepository, communityRepository, notificationRepository)
