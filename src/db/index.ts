@@ -17,6 +17,7 @@ import {
     accountsRelations
 } from "@/db/schema/auth-schema"
 import { drizzle } from 'drizzle-orm/node-postgres' 
+import { category } from "./schema/category";
 
 export const db = drizzle(process.env.DATABASE_URL!, {
     schema: {
@@ -27,6 +28,7 @@ export const db = drizzle(process.env.DATABASE_URL!, {
         accounts,
         verifications,
         notifications,
+        category,
         communityRelations,       
         communityMembersRelations, 
         usersRelations,
