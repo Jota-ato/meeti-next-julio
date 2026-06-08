@@ -137,6 +137,14 @@ class CommunityService {
         }
     }
 
+    async getUserCommunitiesForAPI(userId: User['id']) { 
+        const communities = await this.communityRepository.findByUser(userId)
+        return communities.map(community => ({
+            id: community.id,
+            name: community.name
+        }))
+    }
+
     /**
      * Executes the deletion flow for a community, including permission validation, 
      * password verification, DB removal, and associated asset cleanup via UploadThing.
