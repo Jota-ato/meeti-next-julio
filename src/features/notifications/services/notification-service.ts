@@ -1,19 +1,33 @@
 import { User } from "@/features/auth/types/auth.types";
 import { INotificationRepository, notificationRepository } from "./notification-repository";
-import { SelectNotification } from "../types/notification.types";
+import { InsertNotification, SelectNotification } from "../types/notification.types";
+import { INotificationPublisher, notificationPusher } from "./notification-pusher";
+
+export interface INotificationService { 
+    createAndNotify(data: InsertNotification): Promise<void>
+    getUnreadCount(userId: User['id']): Promise<number>
+    getUserNotifications(userId: User['id']): Promise<SelectNotification[]>
+    clearNotifications(userId: User['id']): Promise<void>
+}
 
 /**
  * Service layer responsible for executing Notification business logic.
  * Decouples the notification routing and controllers from direct database access.
  */
-class NotificationService {
+class NotificationService implements INotificationService {
     /**
      * Injects the notification repository.
      * @param {INotificationRepository} notificationRepository - Data access layer for notifications.
      */
     constructor(
-        private notificationRepository: INotificationRepository
+        private notificationRepository: INotificationRepository,
+        private notificationPusher: INotificationPublisher
     ) { }
+
+    async createAndNotify(data: InsertNotification) {
+        const notification = await this.notificationRepository.create(data)
+        await this.notificationPusher.notify(notification)
+    }
 
     /**
      * Fetches the total count of unread notifications for UI badging (e.g., bell icon).
@@ -43,4 +57,4 @@ class NotificationService {
     }
 }
 
-export const notificationService = new NotificationService(notificationRepository)
+export const notificationService = new NotificationService(notificationRepository,notificationPusher)
