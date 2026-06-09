@@ -3,7 +3,7 @@ import { CommunityType } from "../schemas/comunity-schema";
 import { communityRepository, ICommunityRepository } from "./community-repository";
 import { CommunityPolicy } from "../policies/community-policy";
 import { MembershipPolicy } from "../policies/membership-policy";
-import { SelectCommunity } from "../types/community.types";
+import { CommunitiesForMeetiType, SelectCommunity } from "../types/community.types";
 import { notFound } from "next/navigation";
 import { checkPassword } from "@/shared/utils/auth";
 import { deleteUTFiles } from "@/lib/uploadthing-server";
@@ -137,7 +137,7 @@ class CommunityService {
         }
     }
 
-    async getUserCommunitiesForAPI(userId: User['id']) { 
+    async getUserCommunitiesForMeeti(userId: User['id']): Promise<CommunitiesForMeetiType[]> { 
         const communities = await this.communityRepository.findByUser(userId)
         return communities.map(community => ({
             id: community.id,

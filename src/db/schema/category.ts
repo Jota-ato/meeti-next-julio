@@ -6,4 +6,3 @@ export const category = pgTable('categories', {
     name: varchar('name', { length: 50 }).notNull(),
     image: varchar('image', {length: 100}).notNull()
 })
-export type SelectCategory = typeof category.$inferSelect

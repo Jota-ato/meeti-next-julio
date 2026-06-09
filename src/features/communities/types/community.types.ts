@@ -29,3 +29,8 @@ export type JoinedCommunity = SelectComunityMembers & {
     community: SelectCommunity,
     user: User
 }
+
+export type CommunitiesForMeetiType = {
+    id: string,
+    name: string
+}

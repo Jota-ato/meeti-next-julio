@@ -18,6 +18,7 @@ import {
 } from "@/db/schema/auth-schema"
 import { drizzle } from 'drizzle-orm/node-postgres' 
 import { category } from "./schema/category";
+import { meeti, meetiLocations } from "./schema/meeti";
 
 export const db = drizzle(process.env.DATABASE_URL!, {
     schema: {
@@ -29,6 +30,8 @@ export const db = drizzle(process.env.DATABASE_URL!, {
         verifications,
         notifications,
         category,
+        meeti,
+        meetiLocations,
         communityRelations,       
         communityMembersRelations, 
         usersRelations,

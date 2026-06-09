@@ -1,35 +1,32 @@
 "use client"
 
+import { CommunitiesForMeetiType } from "@/features/communities/types/community.types";
 import { GroupedSelect, SelectGroup } from "@/shared/components/forms/group-select";
-import { Suspense, use } from "react";
-
-
-
-const communitiesPromise = fetch('/api/user/communities').then(res => res.json())
+import { MeetiType } from "../schemas/meeti-schema";
+import { Control } from "react-hook-form";
 
 export function CommunityFormSelect({
-    control
+    control,
+    communities
 }: {
-    control: any
+    control: Control<MeetiType>,
+    communities: CommunitiesForMeetiType[]
 }) {
 
-    const communitites = use<{ id: string, name: string }[]>(communitiesPromise)
 
     const MOCK_GROUPS: SelectGroup[] = [
         {
             label: "Comunidades que creaste",
-            options: communitites.map(community => ({value: community.id, label: community.name})),
+            options: communities.map(community => ({ value: community.id, label: community.name })),
         },
     ];
 
     return (
-        <Suspense fallback="Cargando...">
-            <GroupedSelect
-                control={control}
-                name="community"
-                placeholder="Comunidad del meeti"
-                groups={MOCK_GROUPS}
-            />
-        </Suspense>
+        <GroupedSelect
+            control={control}
+            name="communityId"
+            placeholder="Comunidad del meeti"
+            groups={MOCK_GROUPS}
+        />
     );
 }

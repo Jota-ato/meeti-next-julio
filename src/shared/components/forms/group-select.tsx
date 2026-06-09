@@ -4,6 +4,7 @@ import {
     Select, SelectContent, SelectGroup, SelectItem,
     SelectLabel, SelectSeparator, SelectTrigger, SelectValue
 } from "@/shared/components/ui/select";
+import { Fragment } from "react";
 import { Controller, type Control, type FieldValues, type Path } from "react-hook-form";
 
 export type SelectOption = {
@@ -43,8 +44,8 @@ export function GroupedSelect<T extends FieldValues>({
                         </SelectTrigger>
                         <SelectContent>
                             {groups.map((group, index) => (
-                                <>
-                                    <SelectGroup key={group.label}>
+                                <Fragment key={group.label}>
+                                    <SelectGroup>
                                         <SelectLabel>{group.label}</SelectLabel>
                                         {group.options.map((option) => (
                                             <SelectItem key={option.value} value={option.value}>
@@ -53,7 +54,7 @@ export function GroupedSelect<T extends FieldValues>({
                                         ))}
                                     </SelectGroup>
                                     {index < groups.length - 1 && <SelectSeparator />}
-                                </>
+                                </Fragment>
                             ))}
                         </SelectContent>
                     </Select>
