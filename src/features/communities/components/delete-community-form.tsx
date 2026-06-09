@@ -17,8 +17,8 @@ export default function DeleteCommunityForm() {
         register,
         reset,
         handleSubmit,
-        formState: { 
-            errors, 
+        formState: {
+            errors,
             isSubmitting
         }
     } = useForm<CheckPasswordType>({
@@ -27,8 +27,8 @@ export default function DeleteCommunityForm() {
 
     const { toggleOpen, setCommunity, community } = useCommunityStore()
 
-    const onSubmit = async (data: CheckPasswordType) => { 
-        if(!community) return
+    const onSubmit = async (data: CheckPasswordType) => {
+        if (!community) return
         const { success, message } = await deleteCommunityAction(data, community.id)
 
         if (!success) toast.error(message)
@@ -37,7 +37,7 @@ export default function DeleteCommunityForm() {
             reset()
             toggleOpen()
             setCommunity(null)
-            setTimeout(() => { 
+            setTimeout(() => {
                 redirect('/dashboard/communities')
             }, 1000)
         }
@@ -54,23 +54,25 @@ export default function DeleteCommunityForm() {
                     {...register('password')}
                 />
 
-                <SubmitButton
-                    destructive
-                    isSubmitting={isSubmitting}
-                    label="Eliminar comunidad"
-                    loadingLabel="Eliminando..."
-                />
+                <div className="flex flex-col sm:flex-row gap-2">
+                    <SubmitButton
+                        destructive
+                        isSubmitting={isSubmitting}
+                        label="Eliminar comunidad"
+                        loadingLabel="Eliminando..."
+                    />
 
-                <Button
-                    type="button"
-                    data-autofocus
-                    onClick={() => { 
-                        toggleOpen()
-                        setCommunity(null)
-                    }}
-                >
-                    Cancelar
-                </Button>
+                    <Button
+                        type="button"
+                        data-autofocus
+                        onClick={() => {
+                            toggleOpen()
+                            setCommunity(null)
+                        }}
+                    >
+                        Cancelar
+                    </Button>
+                </div>
             </FieldSet>
         </Form>
     )

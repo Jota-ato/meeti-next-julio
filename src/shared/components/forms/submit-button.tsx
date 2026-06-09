@@ -14,7 +14,7 @@ export function SubmitButton({ isSubmitting, label, loadingLabel, destructive = 
             variant={destructive ? 'destructive' : 'default'}
             disabled={isSubmitting}
             type="submit"
-            className="w-full disabled:cursor-not-allowed opacity-90"
+            className="disabled:cursor-not-allowed opacity-90"
         >
             {isSubmitting ? (
                 <p className="flex items-center gap-2">
