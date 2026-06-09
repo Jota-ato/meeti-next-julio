@@ -9,6 +9,7 @@ import { Container } from "@/shared/components/ui/container";
 import { ChevronLeft } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 const title = 'Crear Meeti'
 
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
 export default async function CreateMeetiPage() {
 
     const { session } = await requireAuth()
-    if (!session) return new Response(JSON.stringify([]))
+    if (!session) redirect('/auth/sign-in')
 
     const communities = await communityService.getUserCommunitiesForMeeti(session.user.id)
     const categories = await categoryService.getAllCategories()
