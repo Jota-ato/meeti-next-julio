@@ -44,7 +44,7 @@ export function MeetiForm({
     communities,
     categories
 }: {
-    communities: CommunitiesForMeetiType[],
+    communities: CommunitiesForMeetiType[][],
     categories: SelectCategory[]
 }) {
 

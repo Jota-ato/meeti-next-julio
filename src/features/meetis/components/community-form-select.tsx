@@ -10,14 +10,18 @@ export function CommunityFormSelect({
     communities
 }: {
     control: Control<MeetiType>,
-    communities: CommunitiesForMeetiType[]
+    communities: CommunitiesForMeetiType[][]
 }) {
 
 
     const MOCK_GROUPS: SelectGroup[] = [
         {
             label: "Comunidades que creaste",
-            options: communities.map(community => ({ value: community.id, label: community.name })),
+            options: communities[0].map(community => ({ value: community.id, label: community.name })),
+        },
+        {
+            label: "Comunidades a las que te uniste",
+            options: communities[1].map(community => ({ value: community.id, label: community.name })),
         },
     ];
 

@@ -137,12 +137,21 @@ class CommunityService {
         }
     }
 
-    async getUserCommunitiesForMeeti(userId: User['id']): Promise<CommunitiesForMeetiType[]> { 
-        const communities = await this.communityRepository.findByUser(userId)
-        return communities.map(community => ({
+    async getUserCommunitiesForMeeti(userId: User['id']): Promise<CommunitiesForMeetiType[][]> { 
+        const createdCommunities = await this.communityRepository.findByUser(userId)
+        const joinedCommunities = await this.membershipRepository.findJoinedCommunities(userId)
+
+        const formatCreatedCommunities = createdCommunities.map(community => ({
             id: community.id,
             name: community.name
         }))
+
+        const formatJoinedCommunities = joinedCommunities.map(community => ({
+            id: community.community.id,
+            name: community.community.name
+        }))
+
+        return [[...formatCreatedCommunities], [...formatJoinedCommunities]]
     }
 
     /**
