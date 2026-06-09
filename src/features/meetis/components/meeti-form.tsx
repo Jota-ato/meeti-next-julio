@@ -6,7 +6,7 @@ import { FieldError, FieldSet } from "@/shared/components/ui/field";
 import { CommunityFormSelect } from "./community-form-select";
 import { useForm } from "react-hook-form";
 import { CommunitiesForMeetiType } from "@/features/communities/types/community.types";
-import { SelectCategory } from "../types/meeti.types";
+import { SelectCategory, SelectMeeti } from "../types/meeti.types";
 import { CategoryFormSelect } from "./category-form-select";
 import dynamic from "next/dynamic";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,7 +14,8 @@ import { MeetiSchema, MeetiType } from "../schemas/meeti-schema"
 import { SubmitButton } from "@/shared/components/forms/submit-button";
 import { VirtualSwitch } from "./virtual-switch";
 import ImageUploader from "@/shared/components/upload/image-uploader";
-import { createMeetiAction } from "../actions/meeti-actions";
+// Importamos la acción de actualizar junto con la de crear
+import { createMeetiAction, updateMeetiAction } from "../actions/meeti-actions"; 
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
 
@@ -42,11 +43,15 @@ const DynamicLocationPicker = dynamic(() => import('./location-picker'), { ssr: 
 
 export function MeetiForm({
     communities,
-    categories
+    categories,
+    meeti
 }: {
-    communities: CommunitiesForMeetiType[][],
+    communities: CommunitiesForMeetiType[][]
     categories: SelectCategory[]
+    meeti?: SelectMeeti
 }) {
+    // Detectamos si estamos editando basándonos en la existencia del prop `meeti`
+    const isEditing = !!meeti;
 
     const {
         control,
@@ -60,32 +65,38 @@ export function MeetiForm({
     } = useForm<MeetiType>({
         resolver: zodResolver(MeetiSchema),
         mode: 'all',
+        // Inicializamos el formulario dinámicamente con los datos existentes o vacíos
         defaultValues: {
-            title: '',
-            details: '',
-            categoryId: '',
-            communityId: '',
-            availableSeats: 0,
-            date: '',
-            time: '',
-            image: '',
-            virtual: false,
+            title: meeti?.title ?? '',
+            details: meeti?.details ?? '',
+            categoryId: meeti?.categoryId ?? '',
+            communityId: meeti?.communityId ?? '',
+            availableSeats: meeti?.availableSeats ?? 0,
+            date: meeti?.date ?? '',
+            time: meeti?.time ?? '',
+            image: meeti?.image ?? '',
+            virtual: meeti?.virtual ?? false,
             location: {
-                placeName: '',
-                address: '',
-                city: '',
-                country: '',
-                lat: 19.4355654,
-                lng: -99.153843
+                placeName: meeti?.location?.placeName ?? '',
+                address: meeti?.location?.address ?? '',
+                city: meeti?.location?.city ?? '',
+                country: meeti?.location?.country ?? '',
+                lat: meeti?.location?.lat ?? 19.4355654,
+                lng: meeti?.location?.lng ?? -99.153843
             }
         }
     })
 
     // eslint-disable-next-line react-hooks/incompatible-library
     const isVirtual = watch('virtual')
+    const currentImage = watch('image')
 
     const onSubmit = async (data: MeetiType) => {
-        const response = await createMeetiAction({...data})
+        console.log(data);
+        const response = isEditing 
+            ? await updateMeetiAction(meeti.id, { ...data })
+            : await createMeetiAction({ ...data })
+
         if (!response.success) {
             toast.error(response.message)
         } else { 
@@ -143,7 +154,8 @@ export function MeetiForm({
                 <ImageUploader
                     onChange={(url) => setValue("image", url || "", { shouldValidate: true })}
                     label="Imagen del meeti"
-                    image={''}
+                    // Pasamos el valor actual de la imagen (vacío o cargado desde la edición)
+                    image={currentImage} 
                 />
 
                 {errors.image && (
@@ -154,8 +166,9 @@ export function MeetiForm({
 
                 <SubmitButton
                     isSubmitting={isSubmitting}
-                    label="Crear Meeti"
-                    loadingLabel="Creando Meeti..."
+                    // Adaptamos dinámicamente las etiquetas del botón
+                    label={isEditing ? "Guardar Cambios" : "Crear Meeti"}
+                    loadingLabel={isEditing ? "Guardando Cambios..." : "Creando Meeti..."}
                 />
             </FieldSet>
         </Form>

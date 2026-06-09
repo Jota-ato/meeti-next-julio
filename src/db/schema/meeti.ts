@@ -1,6 +1,7 @@
 import { pgTable, uuid, varchar, text, boolean, time, date, integer, doublePrecision } from "drizzle-orm/pg-core";
 import { community } from "./community"
 import { users } from "./auth-schema"
+import { relations } from "drizzle-orm";
 
 export const meeti = pgTable('meetis', {
     id: uuid("id").primaryKey().defaultRandom(),
@@ -28,3 +29,17 @@ export const meetiLocations = pgTable('meeti_locations', {
     lat: doublePrecision("latitude").notNull(),
     lng: doublePrecision("longitude").notNull(),
 });
+
+export const meetiRelations = relations(meeti, ({ one }) => ({
+    location: one(meetiLocations, {
+        fields: [meeti.id],
+        references: [meetiLocations.meetiId]
+    })
+}))
+
+export const meetiLocationsRelations = relations(meetiLocations, ({ one }) => ({
+    meeti: one(meeti, {
+        fields: [meetiLocations.meetiId],
+        references: [meeti.id]
+    })
+}))

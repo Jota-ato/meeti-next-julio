@@ -15,5 +15,5 @@ export type InsertMeeti = InsertBasicMeeti & {
 }
 
 export type SelectMeeti = SelectBasicMeeti & {
-    location?: SelectMeetiLocations
+    location?: SelectMeetiLocations | null
 }

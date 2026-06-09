@@ -1,10 +1,10 @@
 import {
     community,
     communityMembers,
-    communityRelations,      
+    communityRelations,
     communityMembersRelations
 } from "@/db/schema/community"
-import { 
+import {
     notifications
 } from "@/db/schema/notifications"
 import {
@@ -16,9 +16,14 @@ import {
     sessionsRelations,
     accountsRelations
 } from "@/db/schema/auth-schema"
-import { drizzle } from 'drizzle-orm/node-postgres' 
+import { drizzle } from 'drizzle-orm/node-postgres'
 import { category } from "./schema/category";
-import { meeti, meetiLocations } from "./schema/meeti";
+import {
+    meeti,
+    meetiLocations,
+    meetiLocationsRelations,
+    meetiRelations
+} from "./schema/meeti";
 
 export const db = drizzle(process.env.DATABASE_URL!, {
     schema: {
@@ -32,8 +37,10 @@ export const db = drizzle(process.env.DATABASE_URL!, {
         category,
         meeti,
         meetiLocations,
-        communityRelations,       
-        communityMembersRelations, 
+        meetiLocationsRelations,
+        meetiRelations,
+        communityRelations,
+        communityMembersRelations,
         usersRelations,
         sessionsRelations,
         accountsRelations,

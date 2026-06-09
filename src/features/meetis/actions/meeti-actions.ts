@@ -30,3 +30,34 @@ export async function createMeetiAction(data: MeetiType): ActionResponse {
         message: `Meeti ${data.title} creada con éxito`
     }
 }
+
+export async function updateMeetiAction(meetiId: string, data: MeetiType): ActionResponse { 
+    const zodResponse = MeetiSchema.safeParse(data)
+
+    if (zodResponse.error) { 
+        return {
+            success: false,
+            message: 'Ocurrió un error'
+        }
+    }
+
+    const { session } = await requireAuth()
+    if (!session) { 
+        return {
+            success: false,
+            message: 'Inicia sessión'
+        }
+    }
+
+    const meeti = await meetiService.updateMeeti(meetiId, data, session.user)
+    if (meeti) { 
+        return {
+            success: true,
+            message: 'Meeti actualizado con éxito'
+        }
+    }
+    return {
+        success: false,
+        message: 'Ocurrió un error'
+    }
+}
