@@ -12,17 +12,17 @@ export function Heading({ children, level = 1, className }: Props) {
     const Tag: ElementType = `h${level}`
 
     const sizeMap: Record<number, string> = {
-        1: 'text-4xl',
-        2: 'text-3xl',
-        3: 'text-2xl',
-        4: 'text-xl',
-        5: 'text-lg',
-        6: 'text-sm',
+        1: 'text-3xl sm:text-4xl',
+        2: 'text-2xl sm:text-3xl',
+        3: 'text-xl sm:text-2xl',
+        4: 'text-lg sm:text-xl',
+        5: 'text-sm sm:text-lg',
+        6: 'text-xs sm:text-sm',
     }
     
     return (
         <Tag className={cn(
-            "font-black uppercase text-3xl md:text-4xl text-center",
+            "font-bold uppercase text-center",
             sizeMap[level], className
         )}>
             {children}

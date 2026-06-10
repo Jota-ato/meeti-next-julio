@@ -85,6 +85,22 @@ class MeetiService {
 
         return updated
     }
+
+    async getMeetiWithDetails(meetiId: string, user?: User) { 
+        const meeti = await this.meetiRepository.findFullById(meetiId)
+
+        if (!meeti) throw new Error('Meeti no encontrado')
+
+        return {
+            data: meeti,
+            context: {
+
+            },
+            permissions: {
+                
+            }
+        }
+    }
 }
 
 export const meetiService = new MeetiService(meetiRepository, membershipRepository, communityRepository)

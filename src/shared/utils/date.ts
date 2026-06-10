@@ -1,4 +1,4 @@
-import { formatDistanceToNow } from "date-fns"
+import { format, formatDistanceToNow, parseISO } from "date-fns"
 import { es } from "date-fns/locale";
 
 export function formatCreatedDate(date: Date) {
@@ -8,7 +8,7 @@ export function formatCreatedDate(date: Date) {
     })
 }
 
-export function formatMeetiDate(date: string, time: string) { 
+export function formatMeetiDate(date: string, time: string) {
     const [year, month, day] = date.split('-').map(Number)
     const [hours, minutes, seconds = 0] = time.split(':').map(Number)
 
@@ -16,4 +16,8 @@ export function formatMeetiDate(date: string, time: string) {
         addSuffix: true,
         locale: es
     })
+}
+
+export function displayDate(date: string) {
+    return format(parseISO(date), 'PPPP', { locale: es })
 }

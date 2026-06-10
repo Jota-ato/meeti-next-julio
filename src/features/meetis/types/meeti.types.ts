@@ -1,5 +1,7 @@
 import { category } from "@/db/schema/category";
 import { meeti, meetiLocations } from "@/db/schema/meeti";
+import { User } from "@/features/auth/types/auth.types";
+import { SelectCommunity } from "@/features/communities/types/community.types";
 
 export type SelectCategory = typeof category.$inferSelect
 
@@ -16,4 +18,10 @@ export type InsertMeeti = InsertBasicMeeti & {
 
 export type SelectMeeti = SelectBasicMeeti & {
     location?: SelectMeetiLocations | null
+}
+
+export type FullMeeti = SelectMeeti & {
+    category: SelectCategory,
+    community: SelectCommunity,
+    admin: User
 }

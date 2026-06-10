@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { InsertMeeti, SelectMeeti } from "../types/meeti.types";
+import { FullMeeti, InsertMeeti, SelectMeeti } from "../types/meeti.types";
 import { meeti, meetiLocations } from "@/db/schema/meeti";
 import { User } from "@/features/auth/types/auth.types";
 import { desc, eq } from "drizzle-orm";
@@ -13,6 +13,7 @@ export interface IMeetiRepository {
     deleteLocation: (meetiId: string) => Promise<void>
     findUpcomingByUserId: (userId: User['id']) => Promise<SelectMeeti[]>
     findById: (id: string) => Promise<SelectMeeti | null>
+    findFullById: (id: string) => Promise<FullMeeti | null>
 }
 
 class MeetiRepository implements IMeetiRepository {
@@ -78,6 +79,22 @@ class MeetiRepository implements IMeetiRepository {
                 }
             })
 
+        return result ?? null
+    }
+
+    async findFullById(id: string) { 
+        const result = await db
+            .query
+            .meeti
+            .findFirst({
+                where: (meeti, { eq }) => eq(meeti.id, id),
+                with: {
+                    location: true,
+                    category: true,
+                    community: true,
+                    admin: true
+                }
+            })
         return result ?? null
     }
 }

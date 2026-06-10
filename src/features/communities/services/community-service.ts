@@ -31,10 +31,11 @@ class CommunityService {
      * @returns {Promise<void>}
      */
     async createCommunity(data: CommunityType, userId: string): Promise<void> {
-        await this.communityRepository.createCommunity({
+        const community = await this.communityRepository.createCommunity({
             ...data,
             createdBy: userId
         })
+        await this.membershipRepository.addMember(community.id, userId)
     }
 
     /**

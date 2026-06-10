@@ -28,7 +28,7 @@ export function CommunityItem({
                 <article className="flex flex-col p-5 flex-1">
                     <header className="p-0 flex flex-col gap-y-1">
                         <Button className="block px-0 text-accent-foreground" asChild variant={'link'}>
-                            <Link className="/" href={`/communities/${id}`}>
+                            <Link href={`/communities/${id}`}>
                                 {name}
                             </Link>
                         </Button>

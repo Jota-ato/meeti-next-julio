@@ -44,7 +44,7 @@ export default async function MeetisPage() {
 
                     {meetis.map(meeti => {
 
-                        const { title, image, date, time } = meeti.data
+                        const { title, image, date, time, id } = meeti.data
 
                         return (
                             <li
@@ -63,9 +63,9 @@ export default async function MeetisPage() {
                                         />
                                     </div>
                                     <CardHeader className="min-w-0 w-full flex-auto">
-                                        <a className="hover:underline font-bold text-lg">
+                                        <Link href={`/meetis/${id}`} className="hover:underline font-bold text-lg">
                                             {title}
-                                        </a>
+                                        </Link>
                                         <p className="text-muted-foreground text-sm">
                                             {formatMeetiDate(date, time)}
                                         </p>
