@@ -20,6 +20,7 @@ import { drizzle } from 'drizzle-orm/node-postgres'
 import { category, categoryRelations } from "./schema/category";
 import {
     meeti,
+    meetiAttendees,
     meetiLocations,
     meetiLocationsRelations,
     meetiRelations
@@ -38,6 +39,7 @@ export const db = drizzle(process.env.DATABASE_URL!, {
         categoryRelations,
         meeti,
         meetiLocations,
+        meetiAttendees,
         meetiLocationsRelations,
         meetiRelations,
         communityRelations,

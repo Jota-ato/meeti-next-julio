@@ -4,12 +4,15 @@ import { IMeetiRepository, meetiRepository } from "./meeti-respository";
 import { communityRepository, ICommunityRepository } from "@/features/communities/services/community-repository";
 import { IMembershipRepository, membershipRepository } from "@/features/communities/services/membership-repository";
 import { MeetiPolicy } from "../policies/meeti-policy";
+import { IMeetiAttendeesRepository, meetiAttendeesRepository } from "./meeti-attendees-repository";
+import { MeetiAttendeePolicy } from "../policies/meeti-attendee-policy";
 
 class MeetiService {
     constructor(
         private meetiRepository: IMeetiRepository,
         private membershipRepository: IMembershipRepository,
-        private communityRepository: ICommunityRepository
+        private communityRepository: ICommunityRepository,
+        private meetiAttendeesRepository: IMeetiAttendeesRepository
     ) { }
 
     async createMeeti(data: MeetiType, user: User) {
@@ -31,7 +34,7 @@ class MeetiService {
         const enriched = await Promise.all(upcomingMeetis.map(async (meeti) => {
             return {
                 data: meeti,
-                attendanceCount: 0,
+                attendanceCount: await this.meetiAttendeesRepository.findAttendeesCount(meeti.id),
                 context: {
                     isAdmin: MeetiPolicy.isAdmin(user, meeti)
                 },
@@ -91,16 +94,28 @@ class MeetiService {
 
         if (!meeti) throw new Error('Meeti no encontrado')
 
+        if (!user) throw new Error('No hay usuario...')
+
+        const isAttending = await this.meetiAttendeesRepository.isUserAttending(user.id, meetiId)
+        const isPastMeeti = MeetiPolicy.isPastMeeti(meeti)
         return {
             data: meeti,
             context: {
-
+                isAdmin: MeetiPolicy.isAdmin(user, meeti),
+                isPastMeeti,
+                isAttending
             },
             permissions: {
-                
+                canConfirm: MeetiAttendeePolicy.canConfirm(user, meeti, isAttending),
+                canCancel: MeetiAttendeePolicy.canCancel(user, meeti, isAttending),
             }
         }
     }
 }
 
-export const meetiService = new MeetiService(meetiRepository, membershipRepository, communityRepository)
+export const meetiService = new MeetiService(
+    meetiRepository,
+    membershipRepository,
+    communityRepository,
+    meetiAttendeesRepository
+)

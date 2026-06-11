@@ -1,6 +1,8 @@
+import { AttendanceToggleButton } from "@/features/meetis/components/attendance-toggle-button";
 import { DynamicMeetiLocation } from "@/features/meetis/components/dinamic-meeti-location";
 import { OrganizerCard } from "@/features/meetis/components/organizer-card";
 import { meetiService } from "@/features/meetis/sevices/meeti-service";
+import { requireAuth } from "@/lib/auth-server";
 import { Heading } from "@/shared/components/typography/heading";
 import { displayDate } from "@/shared/utils/date";
 import { Metadata } from "next";
@@ -45,15 +47,21 @@ export default async function MeetiPage({
     params: Promise<{ id: string }>
 }) {
 
+    const { session } = await requireAuth()
     const { id } = await params
-    const { data: meeti } = await meetiService.getMeetiWithDetails(id)
+    const { data: meeti, context, permissions } = await meetiService.getMeetiWithDetails(id, session?.user)
+
+    if (context.isPastMeeti) throw new Error('Meeti no encontrado')
+
     const {
         community,
         category,
         admin,
         virtual: IsVirtual,
-        location
+        location,
     } = meeti
+
+    console.log(permissions, context);
 
     return (
         <>
@@ -79,6 +87,15 @@ export default async function MeetiPage({
                     </p>
                 </div>
             </nav>
+
+            {(permissions && !context.isAdmin)  && (
+                <div className="max-w-6xl mx-auto my-10 flex gap-4 justify-end">
+                    <AttendanceToggleButton
+                        meetiId={meeti.id}
+                        permissions={permissions}
+                    />
+                </div>
+            )}
 
             <Heading className="mt-10">
                 {meeti.title}
