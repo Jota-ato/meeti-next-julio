@@ -1,4 +1,4 @@
-import { format, formatDistanceToNow, parseISO } from "date-fns"
+import { differenceInMinutes, format, formatDistanceToNow, parseISO } from "date-fns"
 import { es } from "date-fns/locale";
 
 export function formatCreatedDate(date: Date) {
@@ -20,4 +20,8 @@ export function formatMeetiDate(date: string, time: string) {
 
 export function displayDate(date: string) {
     return format(parseISO(date), 'PPPP', { locale: es })
+}
+
+export function getMinutesDiffFromNow(timestampMs: number) { 
+    return differenceInMinutes(new Date(timestampMs), new Date())
 }

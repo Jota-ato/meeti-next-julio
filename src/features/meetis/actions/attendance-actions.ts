@@ -2,16 +2,31 @@
 
 import { requireAuth } from "@/lib/auth-server";
 import { meetiAttendeesService } from "../sevices/meeti-attendees-service";
+import { getClientIp } from "@/shared/utils/ip";
+import { rateLimit } from "@/lib/limiter";
+import { getMinutesDiffFromNow } from "@/shared/utils/date";
 
-export async function toggleAttendanceAction(meetiId: string) {
+export async function toggleAttendanceAction(meetiId: string, canConfirm: boolean) {
+    const ip = await getClientIp()
+    const { success, reset } = await rateLimit.limit(ip)
+
+    if (!success) return {
+        success: false,
+        message: `Demasiadas solicitudes, intenta nuevamente en ${getMinutesDiffFromNow(reset)} minutos`,
+        newPermissions: {
+            canConfirm,
+            canCancel: !canConfirm
+        }
+    }
+    
     const { session } = await requireAuth()
 
     if (!session) return {
         success: false,
         message: 'Inicia sesión para confirmar asistencia',
         newPermissions: {
-            canConfirm: false,
-            canCancel: false
+            canConfirm,
+            canCancel: !canConfirm
         }
     }
 
@@ -22,8 +37,8 @@ export async function toggleAttendanceAction(meetiId: string) {
             success: false,
             message: 'Ocurrió un error',
             newPermissions: {
-                canConfirm: false,
-                canCancel: false
+                canConfirm: canConfirm,
+                canCancel: !canConfirm
             }
         }
     }

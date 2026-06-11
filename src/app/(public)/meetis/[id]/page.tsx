@@ -61,8 +61,6 @@ export default async function MeetiPage({
         location,
     } = meeti
 
-    console.log(permissions, context);
-
     return (
         <>
             <nav className="py-5 border-b border-gray-200 px-5 lg:px-0">

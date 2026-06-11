@@ -17,7 +17,8 @@ export function AttendanceToggleButton({
     const [canConfirm, setCanConfirm] = useState(permissions.canConfirm)
 
     const handleClick = async () => {
-        const response = await toggleAttendanceAction(meetiId)
+
+        const response = await toggleAttendanceAction(meetiId, canConfirm)
 
         if (!response.success) {
             toast.error(response.message)
