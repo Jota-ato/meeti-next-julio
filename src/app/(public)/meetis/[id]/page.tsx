@@ -86,14 +86,17 @@ export default async function MeetiPage({
                 </div>
             </nav>
 
-            {(permissions && !context.isAdmin)  && (
-                <div className="max-w-6xl mx-auto my-10 flex gap-4 justify-end">
+            <div className="max-w-6xl mx-auto my-10 flex gap-4 justify-end">
+                {!session?.user && (
+                    <p>Confirma tu asistencia obteniendo una cuenta. Es gratis</p>
+                )}
+                {(permissions && !context.isAdmin) && (
                     <AttendanceToggleButton
                         meetiId={meeti.id}
                         permissions={permissions}
                     />
-                </div>
-            )}
+                )}
+            </div>
 
             <Heading className="mt-10">
                 {meeti.title}

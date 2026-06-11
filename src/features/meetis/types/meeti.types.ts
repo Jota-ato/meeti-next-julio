@@ -1,5 +1,5 @@
 import { category } from "@/db/schema/category";
-import { meeti, meetiLocations } from "@/db/schema/meeti";
+import { meeti, meetiLocations, meetiAttendees } from "@/db/schema/meeti";
 import { User } from "@/features/auth/types/auth.types";
 import { SelectCommunity } from "@/features/communities/types/community.types";
 
@@ -29,4 +29,10 @@ export type FullMeeti = SelectMeeti & {
 export type MeetiPermissions = {
     canConfirm: boolean,
     canCancel: boolean
+}
+
+export type SelectMeetiAttendee = typeof meetiAttendees.$inferSelect
+export type SelectMeetiAttendeeWithUser = SelectMeetiAttendee & {
+    user: User,
+    meeti: SelectMeeti
 }

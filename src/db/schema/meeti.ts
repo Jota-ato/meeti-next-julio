@@ -41,7 +41,7 @@ export const meetiAttendees = pgTable('meeti_attendees', {
     createdAt: timestamp('created_at').defaultNow().notNull()
 })
 
-export const meetiRelations = relations(meeti, ({ one }) => ({
+export const meetiRelations = relations(meeti, ({ one, many }) => ({
     location: one(meetiLocations, {
         fields: [meeti.id],
         references: [meetiLocations.meetiId]
@@ -57,12 +57,24 @@ export const meetiRelations = relations(meeti, ({ one }) => ({
     admin: one(users, {
         fields: [meeti.createdBy],
         references: [users.id]
-    })
+    }),
+    attendees: many(meetiAttendees) 
 }))
 
 export const meetiLocationsRelations = relations(meetiLocations, ({ one }) => ({
     meeti: one(meeti, {
         fields: [meetiLocations.meetiId],
         references: [meeti.id]
+    })
+}))
+
+export const meetiAttendeesRelations = relations(meetiAttendees, ({ one }) => ({
+    meeti: one(meeti, {
+        fields: [meetiAttendees.meetiId],
+        references: [meeti.id]
+    }),
+    user: one(users, {
+        fields: [meetiAttendees.userId],
+        references: [users.id]
     })
 }))

@@ -21,6 +21,7 @@ import { category, categoryRelations } from "./schema/category";
 import {
     meeti,
     meetiAttendees,
+    meetiAttendeesRelations,
     meetiLocations,
     meetiLocationsRelations,
     meetiRelations
@@ -42,6 +43,7 @@ export const db = drizzle(process.env.DATABASE_URL!, {
         meetiAttendees,
         meetiLocationsRelations,
         meetiRelations,
+        meetiAttendeesRelations,
         communityRelations,
         communityMembersRelations,
         usersRelations,

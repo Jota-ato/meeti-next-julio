@@ -15,6 +15,7 @@ export function AttendanceToggleButton({
 }) {
 
     const [canConfirm, setCanConfirm] = useState(permissions.canConfirm)
+    const [canCancel, setCanCancel] = useState(permissions.canCancel)
 
     const handleClick = async () => {
 
@@ -25,6 +26,7 @@ export function AttendanceToggleButton({
         } else { 
             toast.success(response.message)
             setCanConfirm(response.newPermissions.canConfirm)
+            setCanCancel(response.newPermissions.canCancel)
         }
     }
 
@@ -37,7 +39,7 @@ export function AttendanceToggleButton({
                     Confirmar asistencia
                 </Button>
             }
-            {!canConfirm &&
+            {canCancel &&
                 <Button
                     onClick={handleClick}
                     variant={'destructive'}

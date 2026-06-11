@@ -48,21 +48,21 @@ class MeetiService {
         return enriched
     }
 
-    async getMetiById(meetiId: string) { 
+    async getMetiById(meetiId: string) {
         const meeti = await this.meetiRepository.findById(meetiId)
         if (!meeti) throw new Error('Meeti no encontrado')
 
         return meeti
     }
 
-    async getMeetiWithPermissions(meetiId: string, user: User) { 
+    async getMeetiWithPermissions(meetiId: string, user: User) {
         const meeti = await this.getMetiById(meetiId)
 
         return {
             data: meeti,
             context: {
                 isAdmin: MeetiPolicy.isAdmin(user, meeti)
-            }, 
+            },
             permissions: {
                 canViewAttendes: MeetiPolicy.canViewAttendes(user, meeti),
                 canEdit: MeetiPolicy.canEdit(user, meeti),
@@ -71,33 +71,44 @@ class MeetiService {
         }
     }
 
-    async updateMeeti(meetiId: string, data: MeetiType, user: User) { 
+    async updateMeeti(meetiId: string, data: MeetiType, user: User) {
 
         const meeti = await this.getMeetiWithPermissions(meetiId, user)
 
-        if (!meeti.permissions.canEdit) { 
+        if (!meeti.permissions.canEdit) {
             throw new Error('No tienes permisos')
         }
 
         const updated = await this.meetiRepository.update(meeti.data.id, data)
         if (data.virtual) {
             await this.meetiRepository.deleteLocation(updated.id)
-        } else { 
+        } else {
             await this.meetiRepository.updateLocation(updated.id, data.location)
         }
 
         return updated
     }
 
-    async getMeetiWithDetails(meetiId: string, user?: User) { 
+    async getMeetiWithDetails(meetiId: string, user?: User) {
         const meeti = await this.meetiRepository.findFullById(meetiId)
 
         if (!meeti) throw new Error('Meeti no encontrado')
+        const isPastMeeti = MeetiPolicy.isPastMeeti(meeti)
 
-        if (!user) throw new Error('No hay usuario...')
+        if (!user) return {
+            data: meeti,
+            context: {
+                isAdmin: false,
+                isPastMeeti,
+                isAttending: false
+            },
+            permissions: {
+                canConfirm: false,
+                canCancel: false
+            }
+        }
 
         const isAttending = await this.meetiAttendeesRepository.isUserAttending(user.id, meetiId)
-        const isPastMeeti = MeetiPolicy.isPastMeeti(meeti)
         return {
             data: meeti,
             context: {
@@ -109,6 +120,20 @@ class MeetiService {
                 canConfirm: MeetiAttendeePolicy.canConfirm(user, meeti, isAttending),
                 canCancel: MeetiAttendeePolicy.canCancel(user, meeti, isAttending),
             }
+        }
+    }
+
+    async getMeetiAttendees(meetiId: string, user: User) {
+        const meeti = await this.getMetiById(meetiId)
+
+        if (!MeetiPolicy.canViewAttendes(user, meeti)) {
+            throw new Error('No autorizado')
+        }
+
+        const attendees = await this.meetiAttendeesRepository.findAttendeesByMeetiId(meeti.id)
+        return {
+            meeti: meeti,
+            attendees
         }
     }
 }

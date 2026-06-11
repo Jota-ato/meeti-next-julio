@@ -32,9 +32,12 @@ export function MeetiDropdownMenu({ meeti }: Props) {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild>
-                    <a>
+                    <Link
+                    href={`/dashboard/meetis/${meeti.id}/attendees`}
+                    target="_blank"
+                    >
                         Ver Asistentes <span className="sr-only">, {meeti.title}</span>
-                    </a>
+                    </Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild>

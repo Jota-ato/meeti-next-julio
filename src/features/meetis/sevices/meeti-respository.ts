@@ -5,6 +5,7 @@ import { User } from "@/features/auth/types/auth.types";
 import { desc, eq } from "drizzle-orm";
 import { format } from "date-fns";
 import { LocationType, MeetiType } from "../schemas/meeti-schema";
+import { CommunityId } from "@/features/communities/services/community-repository";
 
 export interface IMeetiRepository {
     insert: (data: InsertMeeti) => Promise<void>
@@ -14,6 +15,7 @@ export interface IMeetiRepository {
     findUpcomingByUserId: (userId: User['id']) => Promise<SelectMeeti[]>
     findById: (id: string) => Promise<SelectMeeti | null>
     findFullById: (id: string) => Promise<FullMeeti | null>
+    findUpcomingByCommunity: (communityId: CommunityId) => Promise<SelectMeeti[]>
 }
 
 class MeetiRepository implements IMeetiRepository {
@@ -96,6 +98,23 @@ class MeetiRepository implements IMeetiRepository {
                 }
             })
         return result ?? null
+    }
+
+    async findUpcomingByCommunity(communityId: CommunityId) { 
+        const today = format(new Date(), 'yyyy-MM-dd')
+        return db
+            .query
+            .meeti
+            .findMany({
+                where: (meeti, { eq, gte, and }) => and(
+                    eq(meeti.communityId, communityId),
+                    gte(meeti.date, today)
+                ),
+                with: {
+                    location: true
+                },
+                orderBy: (meeti, { asc }) => asc(meeti.date)
+            })
     }
 }
 

@@ -1,6 +1,6 @@
 import { User } from "@/features/auth/types/auth.types";
 import { CommunityType } from "../schemas/comunity-schema";
-import { communityRepository, ICommunityRepository } from "./community-repository";
+import { CommunityId, communityRepository, ICommunityRepository } from "./community-repository";
 import { CommunityPolicy } from "../policies/community-policy";
 import { MembershipPolicy } from "../policies/membership-policy";
 import { CommunitiesForMeetiType, SelectCommunity } from "../types/community.types";
@@ -8,6 +8,7 @@ import { notFound } from "next/navigation";
 import { checkPassword } from "@/shared/utils/auth";
 import { deleteUTFiles } from "@/lib/uploadthing-server";
 import { IMembershipRepository, membershipRepository } from "./membership-repository";
+import { IMeetiRepository, meetiRepository } from "@/features/meetis/sevices/meeti-respository";
 
 /**
  * Service layer responsible for executing Community business logic.
@@ -21,7 +22,8 @@ class CommunityService {
      */
     constructor(
         private communityRepository: ICommunityRepository,
-        private membershipRepository: IMembershipRepository
+        private membershipRepository: IMembershipRepository,
+        private meetiRepository: IMeetiRepository
     ) { }
 
     /**
@@ -188,6 +190,14 @@ class CommunityService {
             message: 'Communidad eliminada correctamente'
         }
     }
+
+    async getUpcomingMeetisByCommuity(communityId: CommunityId) { 
+        return await this.meetiRepository.findUpcomingByCommunity(communityId)
+    }
 }
 
-export const communityService = new CommunityService(communityRepository, membershipRepository)
+export const communityService = new CommunityService(
+    communityRepository,
+    membershipRepository,
+    meetiRepository
+)
