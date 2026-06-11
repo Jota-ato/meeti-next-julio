@@ -9,6 +9,7 @@ import { checkPassword } from "@/shared/utils/auth";
 import { deleteUTFiles } from "@/lib/uploadthing-server";
 import { IMembershipRepository, membershipRepository } from "./membership-repository";
 import { IMeetiRepository, meetiRepository } from "@/features/meetis/sevices/meeti-respository";
+import { IProfileRepository, profileRepository } from "@/features/profile/services/profile-repository";
 
 /**
  * Service layer responsible for executing Community business logic.
@@ -23,7 +24,8 @@ class CommunityService {
     constructor(
         private communityRepository: ICommunityRepository,
         private membershipRepository: IMembershipRepository,
-        private meetiRepository: IMeetiRepository
+        private meetiRepository: IMeetiRepository,
+        private profileRepository: IProfileRepository
     ) { }
 
     /**
@@ -111,10 +113,11 @@ class CommunityService {
     async getCommunityDetails(communityId: SelectCommunity['id'], user?: User) {
         const community = await this.getCommunity(communityId)
         const memberCount = await this.membershipRepository.getMemberCount(community.id)
+        const admin = await this.profileRepository.findById(community.createdBy)
 
         if (!user) {
             return {
-                data: community,
+                data: {...community, admin},
                 memberCount,
                 context: null,
                 permissions: null
@@ -124,7 +127,7 @@ class CommunityService {
         const isMember = await this.membershipRepository.isMember(communityId, user.id)
 
         return {
-            data: community,
+            data: {...community, admin},
             memberCount,
             context: {
                 isMember,
@@ -199,5 +202,6 @@ class CommunityService {
 export const communityService = new CommunityService(
     communityRepository,
     membershipRepository,
-    meetiRepository
+    meetiRepository,
+    profileRepository
 )

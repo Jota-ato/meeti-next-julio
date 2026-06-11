@@ -1,12 +1,11 @@
 import { User } from "@/features/auth/types/auth.types";
 import { Heading } from "@/shared/components/typography/heading";
 import Image from "next/image";
+import Link from "next/link";
 
 export function OrganizerCard({
-    image,
-    organizer
+    organizer: { image, name, bio, id }
 }: {
-    image: string
     organizer: User
 }) {
 
@@ -24,12 +23,12 @@ export function OrganizerCard({
                     />
                 </div>
                 <div className="col-span-3 space-y-3">
-                    <p className="text-lg font-black">{organizer.name}</p>
-                    <p className="text-gray-500 text-sm"></p>
-                    {/**To do */}
-                    <a
+                    <p className="text-lg font-black">{name}</p>
+                    <p className="text-muted-foreground text-sm">{bio}</p>
+                    <Link
+                        href={`/profiles/${id}`}
                         className="font-bold text-sm bg-pink-600 p-2  text-white block w-full text-center"
-                    >Ver Perfil</a>
+                    >Ver Perfil</Link>
                 </div>
             </div>
         </>

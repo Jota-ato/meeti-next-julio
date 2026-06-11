@@ -35,5 +35,13 @@ export const auth = betterAuth({
             })
         }
     },
+    user: {
+        additionalFields: {
+            bio: {
+                type: 'string',
+                required: false
+            }
+        }
+    },
     plugins: [nextCookies()]
 })

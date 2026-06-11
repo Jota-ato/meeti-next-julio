@@ -71,6 +71,13 @@
       "when": 1781131823799,
       "tag": "0009_complete_red_shift",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1781203251090,
+      "tag": "0010_bizarre_talon",
+      "breakpoints": true
     }
   ]
 }

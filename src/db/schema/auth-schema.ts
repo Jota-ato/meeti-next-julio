@@ -6,6 +6,7 @@ import { meeti } from "./meeti";
 export const users = pgTable("users", {
     id: text("id").primaryKey(),
     name: text("name").notNull(),
+    bio: text('bio'),
     email: text("email").notNull().unique(),
     emailVerified: boolean("email_verified").default(false).notNull(),
     image: text("image"),
@@ -80,7 +81,8 @@ export const usersRelations = relations(users, ({ many }) => ({
     accounts: many(accounts),
     communityMembers: many(communityMembers),
     createdCommunities: many(community),
-    meeties: many(meeti)
+    meeties: many(meeti),
+    communities: many(community)
 }));
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({

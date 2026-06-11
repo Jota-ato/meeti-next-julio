@@ -10,14 +10,27 @@ import {
 } from "@/shared/components/ui/sidebar"
 import { Logo } from '../../ui/logo'
 import { navigation, userNavigation } from './constants';
-import { SidebarNavGroup } from './sidebar-nav-group';
+import { NavItem, SidebarNavGroup } from './sidebar-nav-group';
 import { SignOutButton } from './sign-out-button';
 import { ThemeToggleSideBar } from './theme-toggle-sidebar';
+import { User } from '@/features/auth/types/auth.types';
+import { FaUserCircle } from 'react-icons/fa';
+import { Route } from 'next';
 
-export function DashboardSidebar() {
+export function DashboardSidebar({
+    user
+}: {
+    user: User
+}) {
     const pathName = usePathname()
     const { state } = useSidebar()
     const isCollapsed = state === 'collapsed'
+    const userNav: NavItem[] = [{
+        href: `/profiles/${user.id}` as Route,
+        label: 'Ver tu perfil',
+        icon: FaUserCircle,
+    }, ...userNavigation
+    ]
 
     return (
         <Sidebar collapsible="icon">
@@ -35,7 +48,7 @@ export function DashboardSidebar() {
                 <SidebarNavGroup
                     label="Menú de usuario"
                     groupIcon={MdPerson}
-                    items={userNavigation}
+                    items={userNav}
                     pathName={pathName}
                     isCollapsed={isCollapsed}
                 />

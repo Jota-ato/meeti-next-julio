@@ -136,7 +136,6 @@ export default async function MeetiPage({
                         <p className="text-muted-foreground"><span className="text-accent-foreground font-bold">Hora: </span> {meeti.time}</p>
 
                         <OrganizerCard
-                            image={""}
                             organizer={admin}
                         />
                     </section>

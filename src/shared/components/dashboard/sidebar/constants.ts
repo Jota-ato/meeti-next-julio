@@ -7,7 +7,6 @@ import {
     MdNotifications,
 } from 'react-icons/md';
 import {
-    FaUserCircle,
     FaUserCog,
     FaShieldAlt,
 } from 'react-icons/fa';
@@ -30,11 +29,6 @@ export const userNavigation: {
     label: string;
     icon: IconType;
 }[] = [
-        {
-            href: '/dashboard/profile',
-            label: 'Ver tu perfil',
-            icon: FaUserCircle,
-        },
         {
             href: '/dashboard/profile',
             label: 'Administra tu Perfil',

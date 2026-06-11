@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { currentPath } from '@/shared/utils/ui';
 
-type NavItem = {
+export type NavItem = {
     href: Route;
     label: string;
     icon: IconType;

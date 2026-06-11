@@ -23,7 +23,9 @@ export default async function DashboardLayout({
     return (
         <>
             <SidebarProvider>
-                <DashboardSidebar />
+                <DashboardSidebar
+                    user={session.user}
+                />
                 <main className="min-h-screen w-full relative py-12 sm:py-16">
                     <SidebarTrigger className="absolute top-2 left-4 z-20" />
                     <NotificationsPanel />

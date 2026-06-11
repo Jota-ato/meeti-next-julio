@@ -21,7 +21,7 @@ export const metadata: Metadata = {
         default: "Meeti Next",
         template: `%s | ${process.env.APP_NAME}`
     },
-    description: "Meeti next julio con DrizzelORM",
+    description: "Meeti next julio con DrizzelORM y better-auth",
 };
 
 export default function RootLayout({
