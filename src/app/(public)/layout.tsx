@@ -1,3 +1,4 @@
+import { Footer } from "@/shared/components/ui/footer";
 import { Header } from "@/shared/components/ui/header";
 
 export default function Layout({
@@ -9,6 +10,8 @@ export default function Layout({
         <div className="min-h-full">
             <Header />
             {children}
+
+            <Footer />
         </div>
     );
 }

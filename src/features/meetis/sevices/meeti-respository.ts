@@ -17,6 +17,7 @@ export interface IMeetiRepository {
     updateLocation: (meetiId: string, locationData: LocationType) => Promise<void>
     deleteLocation: (meetiId: string) => Promise<void>
     findUpcomingByUserId: (userId: User['id']) => Promise<SelectMeeti[]>
+    findUpcoming: () => Promise<SelectMeeti[]>
     findById: (id: string) => Promise<SelectMeeti | null>
     findFullById: (id: string) => Promise<FullMeeti | null>
     findUpcomingByCommunity: (communityId: CommunityId) => Promise<SelectMeeti[]>
@@ -104,6 +105,28 @@ class MeetiRepository implements IMeetiRepository {
                     gte(meeti.date, today)
                 ),
                 orderBy: (meeti) => desc(meeti.date)
+            })
+    }
+
+    async findUpcoming() { 
+
+        const now = new Date()
+        const nowDate = now.toISOString().slice(0, 10)
+        const nowTime = now.toTimeString().slice(0, 5)
+
+        return await db
+            .query
+            .meeti
+            .findMany({
+                where: (meeti, { or, gte, gt, and , eq}) => or(
+                    gt(meeti.date, nowDate),
+                    and(
+                        eq(meeti.date, nowDate),
+                        gte(meeti.time, nowTime)
+                    )
+                ),
+                limit: 9,
+                orderBy: (meeti, { asc }) => asc(meeti.date) 
             })
     }
 

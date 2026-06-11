@@ -197,6 +197,10 @@ class CommunityService {
     async getUpcomingMeetisByCommuity(communityId: CommunityId) { 
         return await this.meetiRepository.findUpcomingByCommunity(communityId)
     }
+
+    async getFeaturedCommunities() { 
+        return this.communityRepository.findFeatured()
+    }
 }
 
 export const communityService = new CommunityService(

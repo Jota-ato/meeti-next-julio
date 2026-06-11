@@ -1,3 +1,5 @@
+import { FeatuedCommunities } from "@/features/communities/components/featured-comunities";
+import { UpcomingMeetis } from "@/features/meetis/components/upcoming-meetis";
 import { Hero } from "@/shared/components/ui/hero";
 import { Metadata } from "next";
 
@@ -11,6 +13,8 @@ export default async function Home() {
     return (
         <div>
             <Hero />
+            <UpcomingMeetis />
+            <FeatuedCommunities />
         </div>
     )
 }

@@ -136,6 +136,10 @@ class MeetiService {
             attendees
         }
     }
+
+    async getUpcoming() { 
+        return await this.meetiRepository.findUpcoming()
+    }
 }
 
 export const meetiService = new MeetiService(

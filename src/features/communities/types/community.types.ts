@@ -34,3 +34,7 @@ export type CommunitiesForMeetiType = {
     id: string,
     name: string
 }
+
+export type CommunityWithMembersCount = Omit<SelectCommunity, 'createdAt' | 'createdBy'> & {
+    membersCount: string
+}
