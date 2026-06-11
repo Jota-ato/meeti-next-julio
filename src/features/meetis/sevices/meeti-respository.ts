@@ -7,6 +7,10 @@ import { format } from "date-fns";
 import { LocationType, MeetiType } from "../schemas/meeti-schema";
 import { CommunityId } from "@/features/communities/services/community-repository";
 
+/**
+ * Interface defining the data access contract for Meeti entities.
+ * Encapsulates persistence operations for creating, updating, and querying Meetis and their locations.
+ */
 export interface IMeetiRepository {
     insert: (data: InsertMeeti) => Promise<void>
     update: (meetiId: string, data: MeetiType) => Promise<SelectMeeti>
@@ -18,8 +22,18 @@ export interface IMeetiRepository {
     findUpcomingByCommunity: (communityId: CommunityId) => Promise<SelectMeeti[]>
 }
 
+/**
+ * Concrete implementation of the Meeti Repository using Drizzle ORM.
+ * @implements {IMeetiRepository}
+ */
 class MeetiRepository implements IMeetiRepository {
-    async insert(data: InsertMeeti) {
+    /**
+     * Persists a new Meeti and, when applicable, its physical location.
+     * Location data is inserted only when the Meeti is not virtual and location details are provided.
+     * @param {InsertMeeti} data - The payload required to create a Meeti.
+     * @returns {Promise<void>}
+     */
+    async insert(data: InsertMeeti): Promise<void> {
         const [insertedMeeti] = await db
             .insert(meeti)
             .values(data)
@@ -35,7 +49,13 @@ class MeetiRepository implements IMeetiRepository {
         }
     }
 
-    async update(meetiId: string, data: MeetiType) {
+    /**
+     * Updates the core fields of an existing Meeti.
+     * @param {string} meetiId - The unique identifier of the Meeti to update.
+     * @param {MeetiType} data - The validated field values to persist.
+     * @returns {Promise<SelectMeeti>} The updated Meeti record.
+     */
+    async update(meetiId: string, data: MeetiType): Promise<SelectMeeti> {
         return (await db
             .update(meeti)
             .set(data)
@@ -43,20 +63,37 @@ class MeetiRepository implements IMeetiRepository {
             .returning())[0]
     }
 
-    async updateLocation(meetiId: string, locationData: LocationType) {
+    /**
+     * Updates the physical location associated with a Meeti.
+     * @param {string} meetiId - The unique identifier of the Meeti whose location will be updated.
+     * @param {LocationType} locationData - The validated location field values to persist.
+     * @returns {Promise<void>}
+     */
+    async updateLocation(meetiId: string, locationData: LocationType): Promise<void> {
         await db
             .update(meetiLocations)
             .set(locationData)
             .where(eq(meetiLocations.meetiId, meetiId));
     }
 
-    async deleteLocation(meetiId: string) {
+    /**
+     * Removes the physical location record associated with a Meeti.
+     * @param {string} meetiId - The unique identifier of the Meeti whose location will be deleted.
+     * @returns {Promise<void>}
+     */
+    async deleteLocation(meetiId: string): Promise<void> {
         await db
             .delete(meetiLocations)
             .where(eq(meetiLocations.meetiId, meetiId));
     }
 
-    async findUpcomingByUserId(userId: User['id']) {
+    /**
+     * Retrieves upcoming Meetis created by a specific user.
+     * Results are limited to Meetis scheduled on or after the current date and ordered by date descending.
+     * @param {User['id']} userId - The unique identifier of the Meeti creator.
+     * @returns {Promise<SelectMeeti[]>} An array of upcoming Meeti records.
+     */
+    async findUpcomingByUserId(userId: User['id']): Promise<SelectMeeti[]> {
         const today = format(new Date(), 'yyyy-MM-dd')
         return await db
             .query
@@ -70,7 +107,12 @@ class MeetiRepository implements IMeetiRepository {
             })
     }
 
-    async findById(id: string) {
+    /**
+     * Retrieves a Meeti by its unique identifier, including its location relation when present.
+     * @param {string} id - The unique identifier of the Meeti.
+     * @returns {Promise<SelectMeeti | null>} The Meeti record, or `null` if no match is found.
+     */
+    async findById(id: string): Promise<SelectMeeti | null> {
         const result = await db
             .query
             .meeti
@@ -84,7 +126,13 @@ class MeetiRepository implements IMeetiRepository {
         return result ?? null
     }
 
-    async findFullById(id: string) { 
+    /**
+     * Retrieves a Meeti by its unique identifier with all relations required for a full detail view.
+     * Includes location, category, community, and administrator data when available.
+     * @param {string} id - The unique identifier of the Meeti.
+     * @returns {Promise<FullMeeti | null>} The fully populated Meeti record, or `null` if no match is found.
+     */
+    async findFullById(id: string): Promise<FullMeeti | null> {
         const result = await db
             .query
             .meeti
@@ -100,7 +148,14 @@ class MeetiRepository implements IMeetiRepository {
         return result ?? null
     }
 
-    async findUpcomingByCommunity(communityId: CommunityId) { 
+    /**
+     * Retrieves upcoming Meetis belonging to a specific community.
+     * Results are limited to Meetis scheduled on or after the current date, include location data,
+     * and are ordered by date ascending.
+     * @param {CommunityId} communityId - The unique identifier of the community.
+     * @returns {Promise<SelectMeeti[]>} An array of upcoming Meeti records for the community.
+     */
+    async findUpcomingByCommunity(communityId: CommunityId): Promise<SelectMeeti[]> {
         const today = format(new Date(), 'yyyy-MM-dd')
         return db
             .query
@@ -118,4 +173,5 @@ class MeetiRepository implements IMeetiRepository {
     }
 }
 
+/** Singleton instance of {@link MeetiRepository} for application-wide use. */
 export const meetiRepository = new MeetiRepository()
