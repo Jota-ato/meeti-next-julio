@@ -12,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { MeetiDropdownMenu } from "@/features/meetis/components/meeti-dropdown-menu"
+import DeleteMeetiDialog from "@/features/meetis/components/delete-meeti-dialog";
 
 const title = 'Administra tus Meetis'
 
@@ -91,7 +92,7 @@ export default async function MeetisPage() {
                 </p >
             )
             }
-
+            <DeleteMeetiDialog />
         </Container >
     )
 }

@@ -6,7 +6,6 @@ import { desc, eq } from "drizzle-orm";
 import { format } from "date-fns";
 import { LocationType, MeetiType } from "../schemas/meeti-schema";
 import { CommunityId } from "@/features/communities/services/community-repository";
-import { categories } from "@/db/seed/data/categories";
 
 /**
  * Interface defining the data access contract for Meeti entities.
@@ -23,6 +22,7 @@ export interface IMeetiRepository {
     findFullById: (id: string) => Promise<FullMeeti | null>
     findUpcomingByCommunity: (communityId: CommunityId) => Promise<SelectMeeti[]>
     findByCategory: (categoryId: string) => Promise<SelectMeeti[]>
+    delete: (meetiId: string) => Promise<void>
 }
 
 /**
@@ -110,7 +110,7 @@ class MeetiRepository implements IMeetiRepository {
             })
     }
 
-    async findUpcoming() { 
+    async findUpcoming() {
 
         const now = new Date()
         const nowDate = now.toISOString().slice(0, 10)
@@ -120,7 +120,7 @@ class MeetiRepository implements IMeetiRepository {
             .query
             .meeti
             .findMany({
-                where: (meeti, { or, gte, gt, and , eq}) => or(
+                where: (meeti, { or, gte, gt, and, eq }) => or(
                     gt(meeti.date, nowDate),
                     and(
                         eq(meeti.date, nowDate),
@@ -128,7 +128,7 @@ class MeetiRepository implements IMeetiRepository {
                     )
                 ),
                 limit: 9,
-                orderBy: (meeti, { asc }) => asc(meeti.date) 
+                orderBy: (meeti, { asc }) => asc(meeti.date)
             })
     }
 
@@ -197,9 +197,9 @@ class MeetiRepository implements IMeetiRepository {
             })
     }
 
-    async findByCategory(categoryId: string) { 
+    async findByCategory(categoryId: string) {
 
-        const today= format(new Date(), 'yyyy-MM-dd')
+        const today = format(new Date(), 'yyyy-MM-dd')
 
         return await db
             .query
@@ -212,6 +212,12 @@ class MeetiRepository implements IMeetiRepository {
                 orderBy: (meeti, { asc }) => asc(meeti.date),
                 limit: 10
             })
+    }
+
+    async delete(meetiId: string) {
+        await db
+            .delete(meeti)
+            .where(eq(meeti.id, meetiId))
     }
 }
 

@@ -8,12 +8,16 @@ import {
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline"
 import { SelectMeeti } from "../types/meeti.types"
 import Link from "next/link"
+import { useMeetiStore } from "../stores/meeti.store";
 
 type Props = {
     meeti: SelectMeeti
 }
 
 export function MeetiDropdownMenu({ meeti }: Props) {
+
+    const { setOpen, setMeeti } = useMeetiStore()
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger className="flex-none">
@@ -33,8 +37,8 @@ export function MeetiDropdownMenu({ meeti }: Props) {
 
                 <DropdownMenuItem asChild>
                     <Link
-                    href={`/dashboard/meetis/${meeti.id}/attendees`}
-                    target="_blank"
+                        href={`/dashboard/meetis/${meeti.id}/attendees`}
+                        target="_blank"
                     >
                         Ver Asistentes <span className="sr-only">, {meeti.title}</span>
                     </Link>
@@ -49,7 +53,13 @@ export function MeetiDropdownMenu({ meeti }: Props) {
                 <DropdownMenuItem
                     className="text-destructive! cursor-pointer hover:bg-destructive/10! hover:text-destructive!"
                 >
-                    <button type="button">
+                    <button
+                        type="button"
+                        onClick={() => { 
+                            setOpen(true)
+                            setMeeti(meeti)
+                        }}
+                    >
                         Eliminar <span className="sr-only">, {meeti.title}</span>
                     </button>
                 </DropdownMenuItem>

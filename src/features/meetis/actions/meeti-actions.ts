@@ -5,10 +5,10 @@ import { MeetiSchema, MeetiType } from "../schemas/meeti-schema";
 import { requireAuth } from "@/lib/auth-server";
 import { meetiService } from "../sevices/meeti-service";
 
-export async function createMeetiAction(data: MeetiType): ActionResponse { 
+export async function createMeetiAction(data: MeetiType): ActionResponse {
 
     const { session } = await requireAuth()
-    if (!session) { 
+    if (!session) {
         return {
             success: false,
             message: 'No hay autenticación'
@@ -16,7 +16,7 @@ export async function createMeetiAction(data: MeetiType): ActionResponse {
     }
 
     const zodResponse = MeetiSchema.safeParse(data)
-    if (!zodResponse.success) { 
+    if (!zodResponse.success) {
         return {
             success: false,
             message: 'hubo un error'
@@ -31,10 +31,10 @@ export async function createMeetiAction(data: MeetiType): ActionResponse {
     }
 }
 
-export async function updateMeetiAction(meetiId: string, data: MeetiType): ActionResponse { 
+export async function updateMeetiAction(meetiId: string, data: MeetiType): ActionResponse {
     const zodResponse = MeetiSchema.safeParse(data)
 
-    if (zodResponse.error) { 
+    if (zodResponse.error) {
         return {
             success: false,
             message: 'Ocurrió un error'
@@ -42,7 +42,7 @@ export async function updateMeetiAction(meetiId: string, data: MeetiType): Actio
     }
 
     const { session } = await requireAuth()
-    if (!session) { 
+    if (!session) {
         return {
             success: false,
             message: 'Inicia sessión'
@@ -50,7 +50,7 @@ export async function updateMeetiAction(meetiId: string, data: MeetiType): Actio
     }
 
     const meeti = await meetiService.updateMeeti(meetiId, data, session.user)
-    if (meeti) { 
+    if (meeti) {
         return {
             success: true,
             message: 'Meeti actualizado con éxito'
@@ -59,5 +59,22 @@ export async function updateMeetiAction(meetiId: string, data: MeetiType): Actio
     return {
         success: false,
         message: 'Ocurrió un error'
+    }
+}
+
+export async function deleteMeetiAction(meetiId: string): ActionResponse {
+    const { session } = await requireAuth()
+    if (!session) {
+        return {
+            success: false,
+            message: 'Inicia sessión'
+        }
+    }
+
+    await meetiService.deleteMeeti(meetiId, session.user)
+
+    return {
+        success: true,
+        message: 'Meeti eliminado con éxito'
     }
 }

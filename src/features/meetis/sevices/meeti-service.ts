@@ -6,6 +6,7 @@ import { IMembershipRepository, membershipRepository } from "@/features/communit
 import { MeetiPolicy } from "../policies/meeti-policy";
 import { IMeetiAttendeesRepository, meetiAttendeesRepository } from "./meeti-attendees-repository";
 import { MeetiAttendeePolicy } from "../policies/meeti-attendee-policy";
+import { deleteUTFiles } from "@/lib/uploadthing-server";
 
 class MeetiService {
     constructor(
@@ -137,12 +138,26 @@ class MeetiService {
         }
     }
 
-    async getUpcoming() { 
+    async getUpcoming() {
         return await this.meetiRepository.findUpcoming()
     }
 
-    async getMeetisByCategory(categoryId: string) { 
+    async getMeetisByCategory(categoryId: string) {
         return await this.meetiRepository.findByCategory(categoryId)
+    }
+
+    async deleteMeeti(meetiId: string, user: User) {
+
+        const meeti = await this.meetiRepository.findById(meetiId)
+
+        if (!meeti) throw new Error('Meeti no encontrado')
+
+        if (MeetiPolicy.canDelete(user, meeti)) {
+            await this.meetiRepository.delete(meetiId)
+            await deleteUTFiles(meeti.image)
+        }
+        else
+            throw new Error('No tienes permisos')
     }
 }
 
