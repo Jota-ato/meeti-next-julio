@@ -1,10 +1,11 @@
 "use server"
 import { rateLimit } from "@/lib/limiter";
-import { ForgotPasswordSchema, ForgotPasswordType, ResetPasswordSchema, ResetPasswordType, SignInSchema, SignInType, SignUpSchema, SignUpType } from "../schemas/auth-schema";
+import { ForgotPasswordSchema, ForgotPasswordType, ResetPasswordSchema, ResetPasswordType, SignInSchema, SignInType, SignUpSchema, SignUpType, UpdatePasswordSchema, UpdatePasswordType } from "../schemas/auth-schema";
 import { authService } from "../services/auth-service";
 import { ActionResponse } from "../types/auth.types";
 import { getClientIp } from "@/shared/utils/ip";
 import { getMinutesDiffFromNow } from "@/shared/utils/date";
+import { requireAuth } from "@/lib/auth-server";
 
 export async function signUpAction(input: SignUpType): ActionResponse {
     const zodResponse = SignUpSchema.safeParse(input)
@@ -83,4 +84,18 @@ export async function setNewPasswordAction(input: ResetPasswordType, token: stri
     }
 
     return await authService.setNewPassword(input, token)
+}
+
+export async function updatePasswordAction(input: UpdatePasswordType): ActionResponse { 
+
+    const { session } = await requireAuth()
+    const zodResponse = UpdatePasswordSchema.safeParse(input)
+
+
+    if (!session || zodResponse.error) return {
+        success: false,
+        message: 'Ocurrió un error'
+    }
+
+    return await authService.updatePassword(input, session.user)
 }

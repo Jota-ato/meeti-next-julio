@@ -1,9 +1,10 @@
 import { auth } from "@/lib/auth";
-import { ForgotPasswordType, ResetPasswordType, SignInType, SignUpType } from "../schemas/auth-schema";
+import { ForgotPasswordType, ResetPasswordType, SignInType, SignUpType, UpdatePasswordType } from "../schemas/auth-schema";
 import { authRepository, IAuthRepository } from "./auth-repository";
-import { ActionResponse } from "../types/auth.types";
+import { ActionResponse, User } from "../types/auth.types";
 import { headers } from "next/headers";
 import { APIError } from "better-auth";
+import { checkPassword } from "@/shared/utils/auth";
 
 /**
  * Service layer responsible for orchestrating authentication workflows.
@@ -165,6 +166,30 @@ class AuthService {
                 success: false,
                 message: 'Ocurrió un error inesperado'
             }
+        }
+    }
+
+    async updatePassword(input: UpdatePasswordType, user: User) {
+        const { currentPassword } = input
+        const isValid = await checkPassword(currentPassword)
+
+        if (!isValid) {
+            return {
+                success: false,
+                message: 'La contraseña es incorrecta'
+            }
+        }
+
+        await auth.api.changePassword({
+            body: {
+                ...input
+            },
+            headers: await headers()
+        })
+
+        return {
+            success: true,
+            message: 'Contraseña cambiada con éxito'
         }
     }
 }

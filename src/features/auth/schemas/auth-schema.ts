@@ -29,14 +29,16 @@ export const ForgotPasswordSchema = BaseAuthSchema.pick({
     email: true
 })
 
-export const ResetPasswordSchema = z.object({
+export const BaseResetPasswordSchema = z.object({
     newPassword: z.string()
         .trim()
         .min(8, { message: 'Mínimo 8 caracteres en la contraseña' })
         .regex(/[A-Z]/, { message: 'Debe contener al menos una mayúscula' })
         .regex(/[^a-zA-Z0-9]/, { message: 'Debe contener al menos un carácter especial' }),
     passwordConfirmation: z.string().min(1, { message: 'Confirma tu contraseña' })
-}).refine(
+})
+
+export const ResetPasswordSchema = BaseResetPasswordSchema.refine(
     (data) => data.newPassword === data.passwordConfirmation,
     {
         message: 'Las contraseñas no coinciden',
@@ -48,6 +50,22 @@ export const CheckPasswordSchema = z.object({
     password: z.string().min(1, { message: 'La contraseña es requerida' })
 })
 
+export const UpdatePasswordSchema = BaseResetPasswordSchema.extend({
+    currentPassword: z.string()
+        .trim()
+        .min(8, { message: 'Mínimo 8 caracteres en la contraseña' })
+        .regex(/[A-Z]/, { message: 'Debe contener al menos una mayúscula' })
+        .regex(/[^a-zA-Z0-9]/, { message: 'Debe contener al menos un carácter especial' }),
+    revokeOtherSessions: z.boolean()
+}).refine(
+    (data) => data.newPassword === data.passwordConfirmation,
+    {
+        message: 'Las contraseñas no coinciden',
+        path: ['passwordConfirmation']
+    }
+)
+
+export type UpdatePasswordType = z.infer<typeof UpdatePasswordSchema>
 export type SignInType = z.infer<typeof SignInSchema>
 export type SignUpType = z.infer<typeof SignUpSchema>
 export type ForgotPasswordType = z.infer<typeof ForgotPasswordSchema>
