@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { ForgotPasswordType, ResetPasswordType, SignInType, SignUpType, UpdatePasswordType } from "../schemas/auth-schema";
 import { authRepository, IAuthRepository } from "./auth-repository";
-import { ActionResponse, User } from "../types/auth.types";
+import { ActionResponse } from "../types/auth.types";
 import { headers } from "next/headers";
 import { APIError } from "better-auth";
 import { checkPassword } from "@/shared/utils/auth";
@@ -169,7 +169,7 @@ class AuthService {
         }
     }
 
-    async updatePassword(input: UpdatePasswordType, user: User) {
+    async updatePassword(input: UpdatePasswordType) {
         const { currentPassword } = input
         const isValid = await checkPassword(currentPassword)
 
@@ -187,10 +187,30 @@ class AuthService {
             headers: await headers()
         })
 
+        if (input.passwordConfirmation) { 
+            await auth.api.revokeOtherSessions({
+                headers: await headers()
+            })
+        }
+
         return {
             success: true,
             message: 'Contraseña cambiada con éxito'
         }
+    }
+
+    async getSessions() { 
+        return auth.api.listSessions({
+            headers: await headers()
+        })
+    }
+
+    async getSession() { 
+        return auth.api.getSession(
+            {
+                headers: await headers()
+            }
+        )
     }
 }
 

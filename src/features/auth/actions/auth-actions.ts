@@ -97,5 +97,5 @@ export async function updatePasswordAction(input: UpdatePasswordType): ActionRes
         message: 'Ocurrió un error'
     }
 
-    return await authService.updatePassword(input, session.user)
+    return await authService.updatePassword(input)
 }

@@ -8,6 +8,7 @@ import { SubmitButton } from "@/shared/components/forms/submit-button";
 import { UpdatePasswordSchema, UpdatePasswordType } from "../schemas/auth-schema";
 import { toast } from "sonner";
 import { updatePasswordAction } from "../actions/auth-actions";
+import { redirect } from "next/navigation";
 
 export default function ChangePasswordForm() {
     const {
@@ -26,6 +27,7 @@ export default function ChangePasswordForm() {
         if (success) {
             toast.success(message)
             reset()
+            redirect('/dashboard/security')
         } else {
             toast.error(message)
         }
