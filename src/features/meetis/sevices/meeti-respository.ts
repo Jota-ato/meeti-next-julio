@@ -6,6 +6,7 @@ import { desc, eq } from "drizzle-orm";
 import { format } from "date-fns";
 import { LocationType, MeetiType } from "../schemas/meeti-schema";
 import { CommunityId } from "@/features/communities/services/community-repository";
+import { categories } from "@/db/seed/data/categories";
 
 /**
  * Interface defining the data access contract for Meeti entities.
@@ -21,6 +22,7 @@ export interface IMeetiRepository {
     findById: (id: string) => Promise<SelectMeeti | null>
     findFullById: (id: string) => Promise<FullMeeti | null>
     findUpcomingByCommunity: (communityId: CommunityId) => Promise<SelectMeeti[]>
+    findByCategory: (categoryId: string) => Promise<SelectMeeti[]>
 }
 
 /**
@@ -192,6 +194,23 @@ class MeetiRepository implements IMeetiRepository {
                     location: true
                 },
                 orderBy: (meeti, { asc }) => asc(meeti.date)
+            })
+    }
+
+    async findByCategory(categoryId: string) { 
+
+        const today= format(new Date(), 'yyyy-MM-dd')
+
+        return await db
+            .query
+            .meeti
+            .findMany({
+                where: (meeti, { and, eq, gte }) => and(
+                    eq(meeti.categoryId, categoryId),
+                    gte(meeti.date, today)
+                ),
+                orderBy: (meeti, { asc }) => asc(meeti.date),
+                limit: 10
             })
     }
 }

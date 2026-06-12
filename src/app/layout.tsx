@@ -63,7 +63,7 @@ export default function RootLayout({
                 </ThemeProvider>
             </body>
             <Analytics />
-            <SpeedInsights/>
+            <SpeedInsights />
         </html>
     );
 }

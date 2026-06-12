@@ -140,6 +140,10 @@ class MeetiService {
     async getUpcoming() { 
         return await this.meetiRepository.findUpcoming()
     }
+
+    async getMeetisByCategory(categoryId: string) { 
+        return await this.meetiRepository.findByCategory(categoryId)
+    }
 }
 
 export const meetiService = new MeetiService(

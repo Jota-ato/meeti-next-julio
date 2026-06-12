@@ -1,4 +1,5 @@
 import { FeatuedCommunities } from "@/features/communities/components/featured-comunities";
+import { CategroyList } from "@/features/meetis/components/category-list";
 import { UpcomingMeetis } from "@/features/meetis/components/upcoming-meetis";
 import { Hero } from "@/shared/components/ui/hero";
 import { Metadata } from "next";
@@ -15,6 +16,7 @@ export default async function Home() {
             <Hero />
             <UpcomingMeetis />
             <FeatuedCommunities />
+            <CategroyList />
         </div>
     )
 }

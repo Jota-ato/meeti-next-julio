@@ -18,4 +18,6 @@ class CategoryService {
     }
 }
 
-export const categoryService = new CategoryService(categoryRepository)
+export const categoryService = new CategoryService(
+    categoryRepository
+)
